@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/symphonyoss/extension-api-examples.svg)](https://travis-ci.org/symphonyoss/extension-api-examples)
+
 # Extension API Example
 
 
