@@ -20,4 +20,4 @@
 # under the License.
 #
 language: node_js
-script: npm i webpack -g
+script: npm i webpack -g ; npm i webpack-dev-server -g
