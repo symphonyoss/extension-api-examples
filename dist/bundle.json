@@ -1,0 +1,13 @@
+{
+  "applications": [
+    {
+      "type": "sandbox",
+      "id": "hello",
+      "name": "Hello World",
+      "blurb": "This is a hello world app with a few example extension API invocations!",
+      "publisher": "Symphony",
+      "url": "https://localhost:4000/controller.html",
+      "domain": "localhost"
+    }
+  ]
+}

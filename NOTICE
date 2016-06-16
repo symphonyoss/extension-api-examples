@@ -1,0 +1,13 @@
+Hello World Client Extensions API App 
+Copyright 2016 The Symphony Software Foundation
+
+This product includes software developed at
+The Symphony Software Foundation (http://symphony.foundation).
+
+This project has dependencies on npm modules, including:
+* css-loader
+* html-webpack-plugin
+* style-loader
+* webpack
+* webpack-dev-server
+All of the above are open source software, licensed under the MIT License.
