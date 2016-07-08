@@ -20,4 +20,17 @@
 # under the License.
 #
 language: node_js
+
+env:
+  global:
+   # Need to "gem install travis" first
+   # Generated using command "travis encrypt VERSIONEYE_API_KEY=blah"
+   - secure: "I0ZyufoGuS10a6L5YxPFgPrnFf0Dd1OUaZwnDWvCsoK/dl3U8hGS/bgZVC5w94cj46/jbYLoa+8nB77IUwWARpaDWMPxM81pEyguyOTcxlYWM4ntR6QRoxYyUTvL8Plbafkef7ciARLxlMJMnZWk8KPXUZsDbLwaldba7Wxxtkv1qmYqv1QvbjjP29KiSn9XEQM2ntXNbIilkjG+cbRl5kHmEmkuUmkYj6VBwpkmjEGe1sahB/AKkhtUWO61aVgITJ2OLVuv41BtspMSgNnmk9FIrR1c8a3RvFfEU/+zgelgwrhkQe8Bbh7jpJ/jakzZR+FFN0XeWoodV0tV4Sy6Vp1s1gG79hwp+U1uMXGwSGJBQos9LByWpYW1F8Hvv382W8i+xFvRvsMP9zprlz+DJzysWBPq3afrUHzx6RCYsG0M/P2BLMcGWFKHhFr+6w7Y1QEBkJHGmRT88kjoZPw1Y/N2q4GMiC9wzmqE9Kszce1raidEhAsTmR4zZc+fQnnfXjZLQUP26POusP9CaOZwUuQGg3j8d9PrZ9ooWkXWf3FNwL826WK40E6QGwOtWaO2UzjE1SOfCX1aXtY1E7zywZVFw1Cr5vwr0uQ7unab9VydGb5204aqc6zRtW8OGe/NyKOkil5m3kk9/eF2Ygu7Nn5mWDK/O2xfaGN0mwPZa7o="
+
+before_script:
+  - npm install -g versioneye-update
+
 script: npm i webpack -g ; npm i webpack-dev-server -g
+
+after_success:
+  - versioneye-update --apikey $VERSIONEYE_API_KEY --projectid 578010725bb1390040177cb0
