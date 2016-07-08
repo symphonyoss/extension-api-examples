@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/symphonyoss/extension-api-examples.svg)](https://travis-ci.org/symphonyoss/extension-api-examples)
+[![Dependencies](https://www.versioneye.com/user/projects/578010725bb1390040177cb0/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/578010725bb1390040177cb0#tab-dependencies)
 
 # Extension API Example
 
