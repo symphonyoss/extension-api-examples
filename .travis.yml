@@ -26,6 +26,8 @@ env:
    # Need to "gem install travis" first
    # Generated using command "travis encrypt VERSIONEYE_API_KEY=blah"
    - secure: "I0ZyufoGuS10a6L5YxPFgPrnFf0Dd1OUaZwnDWvCsoK/dl3U8hGS/bgZVC5w94cj46/jbYLoa+8nB77IUwWARpaDWMPxM81pEyguyOTcxlYWM4ntR6QRoxYyUTvL8Plbafkef7ciARLxlMJMnZWk8KPXUZsDbLwaldba7Wxxtkv1qmYqv1QvbjjP29KiSn9XEQM2ntXNbIilkjG+cbRl5kHmEmkuUmkYj6VBwpkmjEGe1sahB/AKkhtUWO61aVgITJ2OLVuv41BtspMSgNnmk9FIrR1c8a3RvFfEU/+zgelgwrhkQe8Bbh7jpJ/jakzZR+FFN0XeWoodV0tV4Sy6Vp1s1gG79hwp+U1uMXGwSGJBQos9LByWpYW1F8Hvv382W8i+xFvRvsMP9zprlz+DJzysWBPq3afrUHzx6RCYsG0M/P2BLMcGWFKHhFr+6w7Y1QEBkJHGmRT88kjoZPw1Y/N2q4GMiC9wzmqE9Kszce1raidEhAsTmR4zZc+fQnnfXjZLQUP26POusP9CaOZwUuQGg3j8d9PrZ9ooWkXWf3FNwL826WK40E6QGwOtWaO2UzjE1SOfCX1aXtY1E7zywZVFw1Cr5vwr0uQ7unab9VydGb5204aqc6zRtW8OGe/NyKOkil5m3kk9/eF2Ygu7Nn5mWDK/O2xfaGN0mwPZa7o="
+   # Generated using command "travis encrypt COVERITY_SCAN_TOKEN=blah"
+   - secure: "khb6MK6nm9eouwF7aaxJHa9HpYzqb+L+otumj+VHwYc1RCGlXKeeI++P5lZn3lV61XJlOAkQ0grm+meR/hsB2mSDtpBFnEMwuI+b+D3HMqs92XWPVTeKgyr0C+hf/Bw112L5/U6giO0Rii8S4H8aowsVzJRFXXdz2efqn2MSWduYB5v8AO9E9Mb9hODY/+YyhtryWq5HbfSEIbIdByDfxnqXlg6a7uE/7zEdLpoZXhlk4gI5kW3hCm2lbqGYfQqMJeCPnQOR0NIB4VSENkXM9G51Tyzf1T7AocElTBmT1lcUsmFU/Ls7ZqZ2JcUQPVSyS44LVn7coo5DJwFGY5BjwOQLl6ZojsYWqTLuPBOfN6SF1uHgoSqgJjV9duZMTraYpVctlUgY2uaQ5786J5ZJHZnkXbuJZB95J7otAtHrwvyzGL2RgZC32f0dXXiHJ8le5jYGddR2zienDw9oM0j5tVqkrff73b6+/arI+6VW2VUjOiNOtRRtgyTquucJ0O+czjPIewAgLUJaNEuQ84rUjYib6ZuIrJyY/6u5JN3kNoT6EY5zzakXaPWf1loe27ypBtR5bsP3Pna89NoAINkgH3eN4vM/Z8zeD8PVP3/UfBV5qwSVOg92v3mQl88aSN9qOBH6yMVnq9Sdx8IPN9CxmI1+mw8K21v7mPMMtLFd5MI="
 
 before_script:
   - npm install -g versioneye-update
@@ -34,3 +36,13 @@ script: npm i webpack -g ; npm i webpack-dev-server -g
 
 after_success:
   - versioneye-update --apikey $VERSIONEYE_API_KEY --projectid 578010725bb1390040177cb0
+
+addons:
+  coverity_scan:
+    project:
+      name: "symphonyoss/extension-api-examples"
+      description: "Build submitted via Travis CI"
+    notification_email: dev@symphony.foundation
+    # build_command_prepend: "mvn clean"
+    # build_command:   "mvn -DskipTests=true compile deploy"
+    branch_pattern: master
