@@ -22,19 +22,30 @@ under the License.
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hello App - App</title>
+    <title>Hello World App - View</title>
+
+    <!-- Include Symphony's stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://symphony.com/resources/api/v1.1/symphony-style.css">
 </head>
-<style>
-    html {  background: #ffffff;  }
-</style>
-<body>
-    <h1>Welcome to the Hello Application!</h1>
 
-    <button id="increment">Increment unread count</button>
+<!-- 
+Add the "symphony-external-app" class to the body.
+See app.js for how the user's theme (light or dark) and font size (large, normal, small, xsmall) are detected and applied.
+-->
+<body class="symphony-external-app">
+    <h1>Hello World!</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-    <div id="cashtag"></div>
+    <!-- Add the appropriate classes to buttons -->
+    <button id="increment" class="button primary">Increment Unread Badge Count</button>
 
+    <input type="text" class="text-input" id="cashtag" placeholder="Cashtag">
+
+    <!-- <div id="cashtag"></div> -->
+
+    <!-- Include Symphony's Client Extension API javascript -->
     <script type="text/javascript" src="https://www.symphony.com/resources/api/v1.0/symphony-api.js" charset="utf-8"></script>
+    <!-- Include the app view javascript -->
     <script type="text/javascript" src="app.bundle.js" charset="utf-8"></script>
 </body>
 </html>
