@@ -17,9 +17,9 @@
 * under the License.
 **/
 
-// Create our own local service
+// Create our own local controller service.
 // We have namespaced local services with "hello:"
-var helloService = SYMPHONY.services.register("hello:controller");
+var helloControllerService = SYMPHONY.services.register("hello:controller");
 
 SYMPHONY.remote.hello().then(function(data) {
 
@@ -51,13 +51,16 @@ SYMPHONY.remote.hello().then(function(data) {
         uiService.registerExtension("cashtag", "hello-cashtag", "hello:controller", {label: "Cashtag Link"});
         uiService.registerExtension("settings", "hello-settings", "hello:controller", {label: "Settings Link"});
 
+        // SHARE: Set the controller that implements the "link" method invoked when shared articles are clicked on.
+        shareService.handleLink("article", "hello:controller");
 
         // Implement some methods on our local service. These will be invoked by user actions.
-        helloService.implement({
+        helloControllerService.implement({
 
             // LEFT NAV & MODULE: When the left navigation item is clicked on, invoke Symphony's module service to show our application in the grid
             select: function(id) {
                 modulesService.show("hello", {title: "Hello World App"}, "hello:controller", "https://localhost:4000/app.html", {
+                    // You must specify canFloat in the module options so that the module can be pinned
                     "canFloat": true,
                 });
             },
@@ -76,14 +79,31 @@ SYMPHONY.remote.hello().then(function(data) {
                     // Open our app in the context of the cashtag:
                     // Put the cashtag in the module title.
                     // Include the cashtag in the URL parameters.
-                    console.log('Cashtag link was clicked.');
                     var cashtag = payload.entity.name;
                     var moduleTitle = "Hello World App: " + cashtag;
-                    modulesService.show("hello", {title: moduleTitle}, "hello:controller", "https://localhost:4000/app.html?cashtag=" + cashtag, {});
+                    modulesService.show("hello-cashtag", {title: moduleTitle}, "hello:controller", "https://localhost:4000/app.html?cashtag=" + cashtag, {
+                        "canFloat": true,
+                        // Use parentModuleId to open a new module without closing the original module ("hello")
+                        "parentModuleId": "hello"
+                    });
                 } else if (uiClass == "settings") {
                     console.log('Settings link was clicked.')
                 }
                 console.dir(payload);
+            },
+
+            // SHARE: Open our app in the context of an article:
+            // Put the article in the moudle title.
+            // Include the article in the URL parameters.
+            link: function(type, articleId) {
+                if(type == "article") {
+                    var moduleTitle = "Hello World App: " + articleId;
+                    modulesService.show("hello-article", {title: moduleTitle}, "hello:controller", "https://localhost:4000/app.html?article=" + articleId, {
+                        "canFloat": true,
+                        // Use parentModuleId to open a new module without closing the original module ("hello")
+                        "parentModuleId": "hello"
+                    });
+                }    
             }
 
         });
