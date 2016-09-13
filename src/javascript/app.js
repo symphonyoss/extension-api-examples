@@ -26,7 +26,8 @@ SYMPHONY.remote.hello().then(function(data) {
     // Set the theme of the app module
     var themeColor = data.themeV2.name;
     var themeSize = data.themeV2.size;
-    document.body.className += " " + themeColor + " " + themeSize;
+    // You must add the symphony-external-app class to the body element
+    document.body.className = "symphony-external-app " + themeColor + " " + themeSize;
 
     SYMPHONY.application.connect("hello", ["modules", "applications-nav", "ui", "share"], ["hello:app"]).then(function(response) {
 
@@ -40,6 +41,15 @@ SYMPHONY.remote.hello().then(function(data) {
         var navService = SYMPHONY.services.subscribe("applications-nav");
         var uiService = SYMPHONY.services.subscribe("ui");
         var shareService = SYMPHONY.services.subscribe("share");
+
+        // UI: Listen for theme change events
+        uiService.listen("themeChangeV2", function() {
+            SYMPHONY.remote.hello().then(function(data) {
+                themeColor = data.themeV2.name;
+                themeSize = data.themeV2.size;
+                document.body.className = "symphony-external-app " + themeColor + " " + themeSize;
+            });
+        });
 
         // MODULE: Add a menu item to our module
         modulesService.addMenuItem("hello", "About Hello World App", "hello-menu-item");

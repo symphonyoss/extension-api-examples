@@ -21,6 +21,7 @@
 // We have namespaced local services with "hello:"
 var helloControllerService = SYMPHONY.services.register("hello:controller");
 
+// All Symphony services are namespaced with SYMPHONY
 SYMPHONY.remote.hello().then(function(data) {
 
     // Register our application with the Symphony client:
@@ -63,6 +64,8 @@ SYMPHONY.remote.hello().then(function(data) {
                     // You must specify canFloat in the module options so that the module can be pinned
                     "canFloat": true,
                 });
+                // Focus the module after it is shown
+                modulesService.focus("hello");
             },
 
             // UI: Execute the following when UI extensions are clicked.
@@ -86,6 +89,7 @@ SYMPHONY.remote.hello().then(function(data) {
                         // Use parentModuleId to open a new module without closing the original module ("hello")
                         "parentModuleId": "hello"
                     });
+                    modulesService.focus("hello-cashtag");
                 } else if (uiClass == "settings") {
                     console.log('Settings link was clicked.')
                 }
@@ -103,6 +107,7 @@ SYMPHONY.remote.hello().then(function(data) {
                         // Use parentModuleId to open a new module without closing the original module ("hello")
                         "parentModuleId": "hello"
                     });
+                    modulesService.focus("hello-article");
                 }    
             }
 

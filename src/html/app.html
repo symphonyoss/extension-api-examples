@@ -41,27 +41,26 @@ under the License.
     		font-weight: bold;
     	}
 
-    	.text-input {
-    		width: 200px;
+    	.module-text-input {
+    		width: 200px !important;
     	}
     </style>
 </head>
 
 <!-- 
-Add the "symphony-external-app" class to the body.
 See app.js for how the user's theme (light or dark) and font size (large, normal, small, xsmall) are detected and applied.
 -->
-<body class="symphony-external-app">
+<body>
     <h1>Hello World!</h1>
 
     <!-- Add the appropriate classes to buttons -->
     <button id="increment" class="button primary">Increment Unread Badge Count</button>
 
     <!-- This textbox will be replaced with a cashtag when the app is launched from a cashtag. -->
-    <input type="text" class="text-input" id="cashtag" placeholder="Cashtag">
+    <input type="text" class="text-input module-text-input" id="cashtag" placeholder="Cashtag">
 
     <!-- This textbox will be replaced with an articleId when the app is launched from an article. -->
-    <input type="text" class="text-input" id="article" placeholder="Article">
+    <input type="text" class="text-input module-text-input" id="article" placeholder="Article">
 
     <!-- These are the contents of an article that can be shared by clicking the share button. -->
     <div>
