@@ -64,6 +64,20 @@ SYMPHONY.remote.hello().then(function(data) {
             navService.count("hello-nav", count);
         });
 
+        // MODULE: Hide the main module when the "Hide Main App Module" button is clicked
+        var hideButton = document.getElementById("hide");
+        hideButton.addEventListener("click", function() {
+            // Note that this will not close any modules opened in context of cashtags or articles since we are specifying the main app module's id
+            modulesService.hide("hello");
+        });
+
+        // MODULE: Change the title of the main module when the "Change Main App Module Title" button is clicked
+        var setTitleButton = document.getElementById("set-title");
+        setTitleButton.addEventListener("click", function() {
+            // Note that this will not change the title of any modules opened in context of cashtags or articles since we are specifying the main app module's id
+            modulesService.setTitle("hello", "New Module Title");
+        });
+
         // SHARE: Trigger Symphony's share modal when the "Share" button is clicked
         var shareButton = document.getElementById("share");
         var articleOptions = {
