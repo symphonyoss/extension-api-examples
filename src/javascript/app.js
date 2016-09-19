@@ -78,6 +78,14 @@ SYMPHONY.remote.hello().then(function(data) {
             modulesService.setTitle("hello", "New Module Title");
         });
 
+        // LEFT NAV: Remove the left navigation item ("Removable Left Nav Item") when the "Remove Left Nav Item" button is clicked
+        var removeLeftNavItemButton = document.getElementById("remove-left-nav-item");
+        removeLeftNavItemButton.addEventListener("click", function() {
+            // Note that this will not remove all left navigation items created by the application - only the one with the specified id
+            // After removing the "Removable Left Nav Item" once, you will need to remove and reinstall the app to bring it back
+            navService.remove('hello-nav-remove');
+        });
+
         // SHARE: Trigger Symphony's share modal when the "Share" button is clicked
         var shareButton = document.getElementById("share");
         var articleOptions = {

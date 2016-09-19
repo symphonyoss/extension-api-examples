@@ -41,7 +41,10 @@ SYMPHONY.remote.hello().then(function(data) {
         var shareService = SYMPHONY.services.subscribe("share");
 
         // LEFT NAV: Add an entry to the left navigation for our application
-        navService.add("hello-nav", {title: "Hello World App"}, "hello:controller");
+        navService.add("hello-nav", "Hello World App", "hello:controller");
+
+        // LEFT NAV: Add an extra left navigation item that can be removed by clicking on the "Remove Left Nav Item Button"
+        navService.add("hello-nav-remove", "Removable Left Nav Item", "hello:controller");
 
         // UI: Add elements to the Symphony user interface: 
         // buttons on IMs/MIMs/rooms, links on cashtag/hashtag hover cards and settings
