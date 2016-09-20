@@ -86,6 +86,13 @@ SYMPHONY.remote.hello().then(function(data) {
             navService.remove('hello-nav-remove');
         });
 
+        // LEFT NAV: Rename the left navigation item ("hello-nav") when the "Rename Left Nav Item" button is clicked
+        var renameLeftNavItemButton = document.getElementById("rename-left-nav-item");
+        renameLeftNavItemButton.addEventListener("click", function() {
+            // Note that this will not rename all left navigation items created by the application - only the one with the specified id
+            navService.rename('hello-nav', 'New Left Nav Title');
+        });
+
         // SHARE: Trigger Symphony's share modal when the "Share" button is clicked
         var shareButton = document.getElementById("share");
         var articleOptions = {

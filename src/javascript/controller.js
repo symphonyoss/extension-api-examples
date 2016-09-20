@@ -63,6 +63,11 @@ SYMPHONY.remote.hello().then(function(data) {
 
             // LEFT NAV & MODULE: When the left navigation item is clicked on, invoke Symphony's module service to show our application in the grid
             select: function(id) {
+                if (id == "hello-nav") {
+                   // Focus the left navigation item when clicked
+                    navService.focus("hello-nav"); 
+                }
+                
                 modulesService.show("hello", {title: "Hello World App"}, "hello:controller", "https://localhost:4000/app.html", {
                     // You must specify canFloat in the module options so that the module can be pinned
                     "canFloat": true,
