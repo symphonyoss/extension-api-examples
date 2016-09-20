@@ -93,6 +93,14 @@ SYMPHONY.remote.hello().then(function(data) {
             navService.rename('hello-nav', 'New Left Nav Title');
         });
 
+        // UI: Remove the Room UI extension button when the "Unregister Room UI Extension" button is clicked
+        var unregisterRoomExtensionButton = document.getElementById("unregister-room-extension");
+        unregisterRoomExtensionButton.addEventListener("click", function() {
+            // Note that this will not remove all UI extensions
+            // This will remove only the extension of a given ID ('hello-room') for a given class ('room')
+            uiService.unregisterExtension('room', 'hello-room');
+        });
+
         // SHARE: Trigger Symphony's share modal when the "Share" button is clicked
         var shareButton = document.getElementById("share");
         var articleOptions = {

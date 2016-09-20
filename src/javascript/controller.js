@@ -48,7 +48,7 @@ SYMPHONY.remote.hello().then(function(data) {
 
         // UI: Add elements to the Symphony user interface: 
         // buttons on IMs/MIMs/rooms, links on cashtag/hashtag hover cards and settings
-        uiService.registerExtension("single-user-im", "hello-im", "hello:controller", {label: "IM Button"});
+        uiService.registerExtension("single-user-im", "hello-im", "hello:controller", {label: "IM Button", data: {"datetime": Date()}});
         uiService.registerExtension("multi-user-im", "hello-mim", "hello:controller", {label: "MIM Button"});
         uiService.registerExtension("room", "hello-room", "hello:controller", {label: "Room Button"});
         uiService.registerExtension("hashtag", "hello-hashtag", "hello:controller", {label: "Hashtag Link"});
@@ -79,7 +79,7 @@ SYMPHONY.remote.hello().then(function(data) {
             // UI: Execute the following when UI extensions are clicked.
             trigger: function(uiClass, id, payload, data) {
                 if (uiClass == "single-user-im") {
-                    console.log('IM button was clicked.');
+                    console.log('IM button was clicked on ' + data.datetime + '.');
                 } else if (uiClass == "multi-user-im") {
                     console.log('MIM button was clicked.');
                 } else if (uiClass == "room") {
