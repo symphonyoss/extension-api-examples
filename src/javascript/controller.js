@@ -41,11 +41,14 @@ SYMPHONY.remote.hello().then(function(data) {
         var shareService = SYMPHONY.services.subscribe("share");
 
         // LEFT NAV: Add an entry to the left navigation for our application
-        navService.add("hello-nav", {title: "Hello World App"}, "hello:controller");
+        navService.add("hello-nav", "Hello World App", "hello:controller");
+
+        // LEFT NAV: Add an extra left navigation item that can be removed by clicking on the "Remove Left Nav Item Button"
+        navService.add("hello-nav-remove", "Removable Left Nav Item", "hello:controller");
 
         // UI: Add elements to the Symphony user interface: 
         // buttons on IMs/MIMs/rooms, links on cashtag/hashtag hover cards and settings
-        uiService.registerExtension("single-user-im", "hello-im", "hello:controller", {label: "IM Button"});
+        uiService.registerExtension("single-user-im", "hello-im", "hello:controller", {label: "IM Button", data: {"datetime": Date()}});
         uiService.registerExtension("multi-user-im", "hello-mim", "hello:controller", {label: "MIM Button"});
         uiService.registerExtension("room", "hello-room", "hello:controller", {label: "Room Button"});
         uiService.registerExtension("hashtag", "hello-hashtag", "hello:controller", {label: "Hashtag Link"});
@@ -60,6 +63,11 @@ SYMPHONY.remote.hello().then(function(data) {
 
             // LEFT NAV & MODULE: When the left navigation item is clicked on, invoke Symphony's module service to show our application in the grid
             select: function(id) {
+                if (id == "hello-nav") {
+                   // Focus the left navigation item when clicked
+                    navService.focus("hello-nav"); 
+                }
+                
                 modulesService.show("hello", {title: "Hello World App"}, "hello:controller", "https://localhost:4000/app.html", {
                     // You must specify canFloat in the module options so that the module can be pinned
                     "canFloat": true,
@@ -71,7 +79,7 @@ SYMPHONY.remote.hello().then(function(data) {
             // UI: Execute the following when UI extensions are clicked.
             trigger: function(uiClass, id, payload, data) {
                 if (uiClass == "single-user-im") {
-                    console.log('IM button was clicked.');
+                    console.log('IM button was clicked on ' + data.datetime + '.');
                 } else if (uiClass == "multi-user-im") {
                     console.log('MIM button was clicked.');
                 } else if (uiClass == "room") {

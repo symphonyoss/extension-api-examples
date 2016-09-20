@@ -78,6 +78,29 @@ SYMPHONY.remote.hello().then(function(data) {
             modulesService.setTitle("hello", "New Module Title");
         });
 
+        // LEFT NAV: Remove the left navigation item ("Removable Left Nav Item") when the "Remove Left Nav Item" button is clicked
+        var removeLeftNavItemButton = document.getElementById("remove-left-nav-item");
+        removeLeftNavItemButton.addEventListener("click", function() {
+            // Note that this will not remove all left navigation items created by the application - only the one with the specified id
+            // After removing the "Removable Left Nav Item" once, you will need to remove and reinstall the app to bring it back
+            navService.remove('hello-nav-remove');
+        });
+
+        // LEFT NAV: Rename the left navigation item ("hello-nav") when the "Rename Left Nav Item" button is clicked
+        var renameLeftNavItemButton = document.getElementById("rename-left-nav-item");
+        renameLeftNavItemButton.addEventListener("click", function() {
+            // Note that this will not rename all left navigation items created by the application - only the one with the specified id
+            navService.rename('hello-nav', 'New Left Nav Title');
+        });
+
+        // UI: Remove the Room UI extension button when the "Unregister Room UI Extension" button is clicked
+        var unregisterRoomExtensionButton = document.getElementById("unregister-room-extension");
+        unregisterRoomExtensionButton.addEventListener("click", function() {
+            // Note that this will not remove all UI extensions
+            // This will remove only the extension of a given ID ('hello-room') for a given class ('room')
+            uiService.unregisterExtension('room', 'hello-room');
+        });
+
         // SHARE: Trigger Symphony's share modal when the "Share" button is clicked
         var shareButton = document.getElementById("share");
         var articleOptions = {
