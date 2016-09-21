@@ -103,16 +103,43 @@ SYMPHONY.remote.hello().then(function(data) {
 
         // SHARE: Trigger Symphony's share modal when the "Share" button is clicked
         var shareButton = document.getElementById("share");
+        // Convert the datestring (07 June 2016) to Unix timestamp for the share service
+        var articleUnixTimestamp = (new Date(document.getElementById("article-date").innerHTML).getTime())/1000;
         var articleOptions = {
             "title": document.getElementById("article-title").innerHTML,
             "subTitle": document.getElementById("article-subtitle").innerHTML,
             "blurb": document.getElementById("article-blurb").innerHTML,
+            "date": articleUnixTimestamp,
+            "publisher": document.getElementById("article-publisher").innerHTML,
+            "author": document.getElementById("article-author").innerHTML,
+            "thumbnail": document.getElementById("article-thumbnail").src,
+            // In this case, the shared article has an ID, which is used to deeplink back into our application
             "id": document.getElementById("article-id").innerHTML               
         };
         shareButton.addEventListener("click", function(){
             shareService.share(
                 "article",
                 articleOptions
+            );
+        });
+
+        var shareButton2 = document.getElementById("share-2");
+        var articleUnixTimestamp2 = (new Date(document.getElementById("article-date-2").innerHTML).getTime())/1000;
+        var articleOptions2 = {
+            "title": document.getElementById("article-title-2").innerHTML,
+            "subTitle": document.getElementById("article-subtitle-2").innerHTML,
+            "blurb": document.getElementById("article-blurb-2").innerHTML,
+            "date": articleUnixTimestamp2,
+            "publisher": document.getElementById("article-publisher-2").innerHTML,
+            "author": document.getElementById("article-author-2").innerHTML,
+            "thumbnail": document.getElementById("article-thumbnail-2").src,
+            // In this case, the shared article has an href link, which should be opened in a new browser window
+            "href": document.getElementById("article-link-2").href    
+        };
+        shareButton2.addEventListener("click", function(){
+            shareService.share(
+                "article",
+                articleOptions2
             );
         });
 

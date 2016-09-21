@@ -32,11 +32,11 @@ under the License.
     		display: none;
     	}
 
-    	#article-blurb {
+    	.blurb {
     		line-height: 1.5;
     	}
 
-    	#article-subtitle {
+        .subtitle {
     		font-style: italic;
     		font-weight: bold;
     	}
@@ -44,6 +44,7 @@ under the License.
     	.module-text-input {
     		width: 200px !important;
     	}
+
     </style>
 </head>
 
@@ -74,15 +75,33 @@ See app.js for how the user's theme (light or dark) and font size (large, normal
 
     <!-- These are the contents of an article that can be shared by clicking the share button. -->
     <div>
-    	<h2 id="article-title">Symphony Launches Mobile App</h2>
-    	<p id="article-subtitle">Application is mobile device management (MDM) compatible.</p>
-    	<p id="article-blurb">Symphony Communication Services, a Palo Alto, Calif.-based messaging startup, announced its enterprise-ready mobile app for Apple iPhone is now available for download.</p>
+        <img id="article-thumbnail" class="hidden" src="https://symphony.com/assets/brand/thumb_symphony_shards.jpg"/>
+        <h2 id="article-title">Symphony Launches Mobile App</h2>    
+    	<p id="article-subtitle" class="subtitle">Application is mobile device management (MDM) compatible.</p>
+    	<p id="article-blurb" class="blurb">Symphony Communication Services, a Palo Alto, Calif.-based messaging startup, announced its enterprise-ready mobile app for Apple iPhone is now available for download.</p>
+        <p id="article-publisher">Waters Technology</p>
     	<p id="article-author">Dan DeFrancesco</p>
     	<p id="article-date">07 June 2016</p>
     	<p id="article-id" class="hidden">symphony-article</p>
     	<!-- @TODO(anjana): Change this to use the share icon rather than button. -->
-    	<button id="share" class="button primary">Share</button>
+        <button id="share" class="button primary">Share</button>
     </div>
+
+    <!-- These are the contents of an article that can be shared by clicking the share button. -->
+    <div>
+        <img id="article-thumbnail-2" class="hidden" src="https://symphony.com/assets/brand/thumb_symphony_shards.jpg" class="hidden"/>
+        <h2 id="article-title-2">Symphony CEO Talks Platform Enhancements</h2>
+        <p id="article-subtitle-2" class="subtitle">David Gurle, Symphony CEO, says his platform now has close to 100,000 users and over 70 firms on it.</p>
+        <p id="article-blurb-2" class="blurb">Following partnership with FactSet, David Gurle discusses how the firm plans on continuing to grow, and its plans for unbundling the terminal.</p>
+        <p id="article-publisher-2">Waters Technology</p>
+        <p id="article-author-2">Dan DeFrancesco</p>
+        <p id="article-date-2">11 July 2016</p>
+        <a id="article-link-2" class="hidden" href="http://www.waterstechnology.com/buy-side-technology/analysis/2464483/symphony-ceo-talks-platform-enhancements">symphony-article</a>
+        <!-- @TODO(anjana): Change this to use the share icon rather than button. -->
+        <button id="share-2" class="button primary">Share</button>
+    </div>
+
+
     
     <!-- This div will be displayed when the About this App menu item is clicked. -->
     <div id="about-hello-world-app" class="hidden">
