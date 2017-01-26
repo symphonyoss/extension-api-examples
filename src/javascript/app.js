@@ -143,6 +143,12 @@ SYMPHONY.remote.hello().then(function(data) {
             );
         });
 
+
+        var linkButton = document.getElementById("link");
+        linkButton.addEventListener("click", function(){
+            modulesService.openLink("https://www.google.com");
+        });
+
         // UI CASHTAG: If the app is opened in the context of a cashtag, show the cashtag in the text box on the app.
         // window.location.search returns the querystring part of a URL. Use substring to omit the leading ?.
         var querystring = window.location.search.substring(1);
