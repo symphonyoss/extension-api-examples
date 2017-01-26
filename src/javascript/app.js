@@ -143,7 +143,7 @@ SYMPHONY.remote.hello().then(function(data) {
             );
         });
 
-
+        // LINKS: Open a link using the openLink() method on the modules service. Links should be opened using this method rather than <a href="..." target="_blank">...</a>.
         var linkButton = document.getElementById("link");
         linkButton.addEventListener("click", function(){
             modulesService.openLink("https://www.google.com");
