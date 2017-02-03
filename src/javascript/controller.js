@@ -51,6 +51,7 @@ SYMPHONY.remote.hello().then(function(data) {
         uiService.registerExtension("single-user-im", "hello-im", "hello:controller", {label: "IM Button", data: {"datetime": Date()}});
         uiService.registerExtension("multi-user-im", "hello-mim", "hello:controller", {label: "MIM Button"});
         uiService.registerExtension("room", "hello-room", "hello:controller", {label: "Room Button"});
+        uiService.registerExtension("profile", "hello-profile", "hello:controller", {label: "Profile Button"});
         uiService.registerExtension("hashtag", "hello-hashtag", "hello:controller", {label: "Hashtag Link"});
         uiService.registerExtension("cashtag", "hello-cashtag", "hello:controller", {label: "Cashtag Link"});
         uiService.registerExtension("settings", "hello-settings", "hello:controller", {label: "Settings Link"});
@@ -84,6 +85,8 @@ SYMPHONY.remote.hello().then(function(data) {
                     console.log('MIM button was clicked.');
                 } else if (uiClass == "room") {
                     console.log('Room button was clicked.');
+                } else if (uiClass == "profile") {
+                    console.log('Profile button was clicked.');
                 } else if (uiClass == "hashtag") {
                     console.log('Hashtag link was clicked.');
                 } else if (uiClass == "cashtag") {
