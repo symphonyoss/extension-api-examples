@@ -14,7 +14,7 @@ and in turn your application can listen and react to click events on those butto
 
 * Have `node` and `npm` installed.
 * Have port 4000 available as we'll run the demo application on this port.
-
+* If you are planning to use Chrome to run the Hello World app, you will need to first enable the #allow-insecure-localhost flag in Chrome. To do this, go to chrome://flags and enable the setting called "Allow invalid certificates for resources loaded from localhost". 
 
 ## Run the example project
 
