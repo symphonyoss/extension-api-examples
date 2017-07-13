@@ -16,10 +16,14 @@
 * specific language governing permissions and limitations
 * under the License.
 **/
-
 // Create our own local controller service.
 // We have namespaced local services with "hello:"
 var helloControllerService = SYMPHONY.services.register("hello:controller");
+
+var messageControllerService = SYMPHONY.services.register("message:controller");
+
+var data = require('./data');
+
 
 // All Symphony services are namespaced with SYMPHONY
 SYMPHONY.remote.hello().then(function(data) {
@@ -27,7 +31,7 @@ SYMPHONY.remote.hello().then(function(data) {
     // Register our application with the Symphony client:
     // Subscribe the application to remote (i.e. Symphony's) services
     // Register our own local services
-    SYMPHONY.application.register("hello", ["modules", "applications-nav", "ui", "share"], ["hello:controller"]).then(function(response) {
+    SYMPHONY.application.register("hello", ["modules", "applications-nav", "ui", "share", "entity"], ["hello:controller", "message:controller"]).then(function(response) {
 
         // The userReferenceId is an anonymized random string that can be used for uniquely identifying users.
         // The userReferenceId persists until the application is uninstalled by the user. 
@@ -39,6 +43,14 @@ SYMPHONY.remote.hello().then(function(data) {
         var navService = SYMPHONY.services.subscribe("applications-nav");
         var uiService = SYMPHONY.services.subscribe("ui");
         var shareService = SYMPHONY.services.subscribe("share");
+        var entityService = SYMPHONY.services.subscribe("entity");
+        entityService.registerRenderer(
+            "com.symphony.testWeather",
+            {},
+            "message:controller"
+        );
+
+
 
         // LEFT NAV: Add an entry to the left navigation for our application
         navService.add("hello-nav", "Hello World App", "hello:controller");
@@ -59,16 +71,16 @@ SYMPHONY.remote.hello().then(function(data) {
         // SHARE: Set the controller that implements the "link" method invoked when shared articles are clicked on.
         shareService.handleLink("article", "hello:controller");
 
-        // Implement some methods on our local service. These will be invoked by user actions.
+// Implement some methods on our local service. These will be invoked by user actions.
         helloControllerService.implement({
 
             // LEFT NAV & MODULE: When the left navigation item is clicked on, invoke Symphony's module service to show our application in the grid
             select: function(id) {
                 if (id == "hello-nav") {
-                   // Focus the left navigation item when clicked
-                    navService.focus("hello-nav"); 
+                    // Focus the left navigation item when clicked
+                    navService.focus("hello-nav");
                 }
-                
+
                 modulesService.show("hello", {title: "Hello World App"}, "hello:controller", "https://localhost:4000/app.html", {
                     // You must specify canFloat in the module options so that the module can be pinned
                     "canFloat": true,
@@ -119,9 +131,31 @@ SYMPHONY.remote.hello().then(function(data) {
                         "parentModuleId": "hello"
                     });
                     modulesService.focus("hello-article");
-                }    
-            }
-
+                }
+            },
         });
+
+        messageControllerService.implement({
+            render: function(type, entityData) {
+                var today = new Date();
+                return {
+                    template: `<messageML>
+                                  <card>
+                                      <span>The current weather in <text id='city'/>, <text id='state'/> is <text id='temp_f'/>F</span>
+                                      <span>The current time is <text id="time"/></span>
+                                  </card>
+                               </messageML>`,
+                    data: {
+                        city: entityData.city,
+                        state: entityData.state,
+                        temp_f: entityData.temp_f,
+                        time: today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+                    },
+                    entityInstanceId: ""
+                };
+            }
+        });
+
+
     }.bind(this))
 }.bind(this));

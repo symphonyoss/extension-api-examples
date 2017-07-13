@@ -21,6 +21,10 @@
 // We have namespaced local services with "hello:"
 var helloAppService = SYMPHONY.services.register("hello:app");
 
+
+var $ = require('jquery');
+var messageData = require('./data');
+
 SYMPHONY.remote.hello().then(function(data) {
 
     // Set the theme of the app module
@@ -42,11 +46,13 @@ SYMPHONY.remote.hello().then(function(data) {
         var uiService = SYMPHONY.services.subscribe("ui");
         var shareService = SYMPHONY.services.subscribe("share");
 
+
+
         // UI: Listen for theme change events
         uiService.listen("themeChangeV2", function() {
-            SYMPHONY.remote.hello().then(function(data) {
-                themeColor = data.themeV2.name;
-                themeSize = data.themeV2.size;
+            SYMPHONY.remote.hello().then(function(theme) {
+                themeColor = theme.themeV2.name;
+                themeSize = theme.themeV2.size;
                 document.body.className = "symphony-external-app " + themeColor + " " + themeSize;
             });
         });
@@ -55,13 +61,14 @@ SYMPHONY.remote.hello().then(function(data) {
         modulesService.addMenuItem("hello", "About Hello World App", "hello-menu-item");
         modulesService.setHandler("hello", "hello:app");
 
+
         // LEFT NAV: Update the left navigation item's badge count when the "Increment Unread Badge Count" button is clicked using the navService's count method.
         var incrementButton = document.getElementById("increment");
         var count = 0;
         // Bind a click event handler
         incrementButton.addEventListener("click", function(){
             count++;
-            navService.count("hello-nav", count);
+            navService.count("hello-nav", count);;
         });
 
         // MODULE: Hide the main module when the "Hide Main App Module" button is clicked
@@ -149,6 +156,52 @@ SYMPHONY.remote.hello().then(function(data) {
             modulesService.openLink("https://www.google.com");
         });
 
+        var messageButton = document.getElementById("structured-objects-playground");
+        messageButton.addEventListener( "click", function() {
+            var parisWeather;
+
+            $.ajax({
+                url: "https://api.apixu.com/v1/current.json?key=c88080af109a403b8da224555173006&q=94304",
+                type: "GET",
+                success : function(data){
+                    parisWeather = data;
+                    var threadId = "kVIiQC8jNpBVF1r8FgaV93___qLH15nNdA";
+                    var fd = new FormData();
+                    //fd.append('message', messageData.messageMLV2);
+                    fd.append('message',
+                    `<messageML>
+                           <div class="entity" data-entity-id="currentWeather">
+                           Please install the Hello World application
+                           </div>
+                     </messageML>`)
+                    var object = {
+                        currentWeather: {
+                            type: 'com.symphony.testWeather',
+                            version: 1.0,
+                            city: parisWeather.location.name,
+                            state: parisWeather.location.region,
+                            temp_f: parisWeather.current.temp_f,
+                        }
+                    }
+                    fd.append('data', JSON.stringify(object));
+                    $.ajax({
+                        url: 'https://nexus1-dev.symphony.com/agent/v4/stream/' + threadId + '/message/create',
+                        type: 'POST',
+                        contentType: false,
+                        processData: false,
+                    headers: {
+                        'sessionToken' : 'e01309efb0c97ab2a525252b97518d6ec965fa6a156e6cdefaec841989364039a72a65506d293bc56ee1cdb9ecf87b1f6a3d079065c67b360737ecbbf70f692f',
+                        'keyManagerToken' : '0100fa512991481f48633965f5fef433a7cc573ea31f8c652f751a8b7327937bf340556dc7742c46c43612f5f94a6305899040f583280e115b281fa8fd50b4346f749727e8a639b2e863c29c9e1cb1519d549b90e561cb7b073b2d0df5ebcecd78f760b9afb4ff70e00ad227629bad6ef05facc2a0c27aae7fa7e1fdc77653690f558afc3782803f8fd8a0a7048642b5c7d773409a1f5a7c7713d4f25c499fcf4c4420b971eaac82702bc859e3b5493b09b5b666d5a53498ed2832c3c45e'
+                    },
+                    data: fd,
+                 });
+                },
+                fail : function(data){
+                    alert("Cannot get weather");
+                },
+            });
+        });
+
         // UI CASHTAG: If the app is opened in the context of a cashtag, show the cashtag in the text box on the app.
         // window.location.search returns the querystring part of a URL. Use substring to omit the leading ?.
         var querystring = window.location.search.substring(1);
@@ -167,7 +220,7 @@ SYMPHONY.remote.hello().then(function(data) {
             }
         } 
         // SHARE: If the app is opened in the context of an article, show the articleId in the text box on the app.
-        // @TODO(anjana): Refactor this redundant code
+        // @TODO(anjana): Refactor this redundant code  
         else if (querystring && /article/.test(querystring)) {
             var urlParams = querystring.split('&');
             for (var i = 0; i < urlParams.length; i++) {
@@ -186,8 +239,12 @@ SYMPHONY.remote.hello().then(function(data) {
                 if (itemId == "hello-menu-item") {
                     document.getElementById("about-hello-world-app").className = "";
                 }
-            }
+            },
+
         });
+
+
+
 
     }.bind(this))
 }.bind(this));
