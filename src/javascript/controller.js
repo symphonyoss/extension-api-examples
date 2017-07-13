@@ -141,7 +141,7 @@ SYMPHONY.remote.hello().then(function(data) {
                 return {
                     template: `<messageML>
                                   <card>
-                                      <span>The current weather in <text id='city'/>, <text id='state'/> is <text id='temp_f'/>F</span>
+                                      <span>The current weather in <text id='city'/>, <text id='state'/> is <text id='temp_f'/>F<br/></span>
                                       <span>The current time is <text id="time"/></span>
                                   </card>
                                </messageML>`,
