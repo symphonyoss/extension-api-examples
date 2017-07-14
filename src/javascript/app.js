@@ -158,49 +158,35 @@ SYMPHONY.remote.hello().then(function(data) {
 
         var messageButton = document.getElementById("structured-objects-playground");
         messageButton.addEventListener( "click", function() {
-            var parisWeather;
-
+            var threadId = "kVIiQC8jNpBVF1r8FgaV93___qLH15nNdA";
+            var fd = new FormData();
+            //fd.append('message', messageData.messageMLV2);
+            fd.append('message',
+            `<messageML>
+                   <div class="entity" data-entity-id="testTime">
+                   Please install the Hello World application
+                   </div>
+             </messageML>`);
+            var object = {
+                testTime: {
+                    type: "com.symphony.test",
+                    version: "1.0",
+                }
+            }
+            fd.append('data', JSON.stringify(object));
             $.ajax({
-                url: "https://api.apixu.com/v1/current.json?key=c88080af109a403b8da224555173006&q=94304",
-                type: "GET",
-                success : function(data){
-                    parisWeather = data;
-                    var threadId = "kVIiQC8jNpBVF1r8FgaV93___qLH15nNdA";
-                    var fd = new FormData();
-                    //fd.append('message', messageData.messageMLV2);
-                    fd.append('message',
-                    `<messageML>
-                           <div class="entity" data-entity-id="currentWeather">
-                           Please install the Hello World application
-                           </div>
-                     </messageML>`)
-                    var object = {
-                        currentWeather: {
-                            type: 'com.symphony.testWeather',
-                            version: 1.0,
-                            city: parisWeather.location.name,
-                            state: parisWeather.location.region,
-                            temp_f: parisWeather.current.temp_f,
-                        }
-                    }
-                    fd.append('data', JSON.stringify(object));
-                    $.ajax({
-                        url: 'https://nexus1-dev.symphony.com/agent/v4/stream/' + threadId + '/message/create',
-                        type: 'POST',
-                        contentType: false,
-                        processData: false,
-                    headers: {
-                        'sessionToken' : 'e01309efb0c97ab2a525252b97518d6ec965fa6a156e6cdefaec841989364039a72a65506d293bc56ee1cdb9ecf87b1f6a3d079065c67b360737ecbbf70f692f',
-                        'keyManagerToken' : '0100fa512991481f48633965f5fef433a7cc573ea31f8c652f751a8b7327937bf340556dc7742c46c43612f5f94a6305899040f583280e115b281fa8fd50b4346f749727e8a639b2e863c29c9e1cb1519d549b90e561cb7b073b2d0df5ebcecd78f760b9afb4ff70e00ad227629bad6ef05facc2a0c27aae7fa7e1fdc77653690f558afc3782803f8fd8a0a7048642b5c7d773409a1f5a7c7713d4f25c499fcf4c4420b971eaac82702bc859e3b5493b09b5b666d5a53498ed2832c3c45e'
-                    },
-                    data: fd,
-                 });
+                url: 'https://nexus1-dev.symphony.com/agent/v4/stream/' + threadId + '/message/create',
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                headers: {
+                    'sessionToken' : 'e01309efb0c97ab2a525252b97518d6ec965fa6a156e6cdefaec841989364039a72a65506d293bc56ee1cdb9ecf87b1f6a3d079065c67b360737ecbbf70f692f',
+                    'keyManagerToken' : '0100fa512991481f48633965f5fef433a7cc573ea31f8c652f751a8b7327937bf340556dc7742c46c43612f5f94a6305899040f583280e115b281fa8fd50b4346f749727e8a639b2e863c29c9e1cb1519d549b90e561cb7b073b2d0df5ebcecd78f760b9afb4ff70e00ad227629bad6ef05facc2a0c27aae7fa7e1fdc77653690f558afc3782803f8fd8a0a7048642b5c7d773409a1f5a7c7713d4f25c499fcf4c4420b971eaac82702bc859e3b5493b09b5b666d5a53498ed2832c3c45e'
                 },
-                fail : function(data){
-                    alert("Cannot get weather");
-                },
-            });
-        });
+                data: fd,
+             });
+         });
+
 
         // UI CASHTAG: If the app is opened in the context of a cashtag, show the cashtag in the text box on the app.
         // window.location.search returns the querystring part of a URL. Use substring to omit the leading ?.
@@ -240,11 +226,6 @@ SYMPHONY.remote.hello().then(function(data) {
                     document.getElementById("about-hello-world-app").className = "";
                 }
             },
-
         });
-
-
-
-
     }.bind(this))
 }.bind(this));

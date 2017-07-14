@@ -45,7 +45,7 @@ SYMPHONY.remote.hello().then(function(data) {
         var shareService = SYMPHONY.services.subscribe("share");
         var entityService = SYMPHONY.services.subscribe("entity");
         entityService.registerRenderer(
-            "com.symphony.testWeather",
+            "com.symphony.test",
             {},
             "message:controller"
         );
@@ -136,20 +136,41 @@ SYMPHONY.remote.hello().then(function(data) {
         });
 
         messageControllerService.implement({
+            calculateDifference: function(today, countdown) {
+                var ms = countdown-today;
+                var hrs = Math.floor(ms/1000/60/60);
+                ms -= hrs * 1000 * 60 * 60;
+                var min = Math.floor(ms/1000/60);
+                ms -= min * 1000 * 60;
+                var sec = Math.floor(ms/1000);
+                var days = Math.floor(hrs/24);
+                var yrs = Math.floor(days/365);
+                days-=yrs*365;
+                hrs-=((yrs*365*24)+(days*24));
+                var diff = {
+                    sec : sec,
+                    min : min,
+                    hrs : hrs,
+                    days : days,
+                    yrs : yrs
+                 };
+               return diff;
+            },
+
             render: function(type, entityData) {
                 var today = new Date();
+                var countdown = new Date(2050, 0);
+                var diff = this.calculateDifference(today, countdown);
                 return {
                     template: `<messageML>
                                   <card>
-                                      <span>The current weather in <text id='city'/>, <text id='state'/> is <text id='temp_f'/>F<br/></span>
-                                      <span>The current time is <text id="time"/></span>
+                                      <span>The time until <text id="countdown"/> is <text id="concat"/></span>
                                   </card>
                                </messageML>`,
                     data: {
-                        city: entityData.city,
-                        state: entityData.state,
-                        temp_f: entityData.temp_f,
-                        time: today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+                        countdown: "1/1/2050",
+                        concat: diff.yrs + " years, " + diff.days + " days, " +
+                                diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds"
                     },
                     entityInstanceId: ""
                 };
