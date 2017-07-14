@@ -163,14 +163,15 @@ SYMPHONY.remote.hello().then(function(data) {
             //fd.append('message', messageData.messageMLV2);
             fd.append('message',
             `<messageML>
-                   <div class="entity" data-entity-id="testTime">
+                   <div class="entity" data-entity-id="staticTimer">
                    Please install the Hello World application
                    </div>
              </messageML>`);
             var object = {
-                testTime: {
-                    type: "com.symphony.test",
+                staticTimer: {
+                    type: "com.symphony.staticTimer",
                     version: "1.0",
+                    countdown: "Jan 1, 2050",
                 }
             }
             fd.append('data', JSON.stringify(object));

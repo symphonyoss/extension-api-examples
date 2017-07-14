@@ -1,21 +1,6 @@
 var icon = 'https://s3-us-west-2.amazonaws.com/symphonypublicicons/logo_gmail_48px.png'
 var logo= 'https://symphony.foundation/images/SymphonyLlcSymbol.png'
 
-exports.pre =
-`<messageML>
-	<div>
-		This is a <b>bunch</b> of preformatted text
-		And this is some more
-	</div>
-	 <script>
-        function getResponse() {
-            var request = new XMLHttpRequest();
-            request.open("GET", "api.openweathermap.org/data/2.5/weather?zip=94040", "c00933b95a17284ddf25d585b537f027");
-            request.send();
-        }
-    </script>
-</messageML>`
-
 exports.messageMLV2 =
 `<messageML>
     <h1>Header1</h1>

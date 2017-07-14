@@ -45,7 +45,7 @@ SYMPHONY.remote.hello().then(function(data) {
         var shareService = SYMPHONY.services.subscribe("share");
         var entityService = SYMPHONY.services.subscribe("entity");
         entityService.registerRenderer(
-            "com.symphony.test",
+            "com.symphony.staticTimer",
             {},
             "message:controller"
         );
@@ -71,7 +71,7 @@ SYMPHONY.remote.hello().then(function(data) {
         // SHARE: Set the controller that implements the "link" method invoked when shared articles are clicked on.
         shareService.handleLink("article", "hello:controller");
 
-// Implement some methods on our local service. These will be invoked by user actions.
+        // Implement some methods on our local service. These will be invoked by user actions.
         helloControllerService.implement({
 
             // LEFT NAV & MODULE: When the left navigation item is clicked on, invoke Symphony's module service to show our application in the grid
@@ -136,8 +136,8 @@ SYMPHONY.remote.hello().then(function(data) {
         });
 
         messageControllerService.implement({
-            calculateDifference: function(today, countdown) {
-                var ms = countdown-today;
+            calculateDifference: function(today, until) {
+                var ms = until-today;
                 var hrs = Math.floor(ms/1000/60/60);
                 ms -= hrs * 1000 * 60 * 60;
                 var min = Math.floor(ms/1000/60);
@@ -158,25 +158,25 @@ SYMPHONY.remote.hello().then(function(data) {
             },
 
             render: function(type, entityData) {
-                var today = new Date();
-                var countdown = new Date(2050, 0);
-                var diff = this.calculateDifference(today, countdown);
-                return {
-                    template: `<messageML>
+                if(type == "com.symphony.staticTimer") {
+                    var today = new Date();
+                    var until = new Date(2050, 0);
+                    var diff = this.calculateDifference(today, until);
+                    return {
+                        template: `<messageML>
                                   <card>
                                       <span>The time until <text id="countdown"/> is <text id="concat"/></span>
                                   </card>
                                </messageML>`,
-                    data: {
-                        countdown: "1/1/2050",
-                        concat: diff.yrs + " years, " + diff.days + " days, " +
-                                diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds"
-                    },
-                    entityInstanceId: ""
-                };
+                        data: {
+                            concat: diff.yrs + " years, " + diff.days + " days, " +
+                            diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
+                            countdown: entityData.countdown
+                        },
+                        entityInstanceId: ""
+                    };
+                }
             }
         });
-
-
     }.bind(this))
 }.bind(this));
