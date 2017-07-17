@@ -16,6 +16,7 @@
 * specific language governing permissions and limitations
 * under the License.
 **/
+
 // Create our own local controller service.
 // We have namespaced local services with "hello:"
 var helloControllerService = SYMPHONY.services.register("hello:controller");

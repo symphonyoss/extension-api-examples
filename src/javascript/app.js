@@ -68,7 +68,7 @@ SYMPHONY.remote.hello().then(function(data) {
         // Bind a click event handler
         incrementButton.addEventListener("click", function(){
             count++;
-            navService.count("hello-nav", count);;
+            navService.count("hello-nav", count);
         });
 
         // MODULE: Hide the main module when the "Hide Main App Module" button is clicked
@@ -207,7 +207,7 @@ SYMPHONY.remote.hello().then(function(data) {
             }
         } 
         // SHARE: If the app is opened in the context of an article, show the articleId in the text box on the app.
-        // @TODO(anjana): Refactor this redundant code  
+        // @TODO(anjana): Refactor this redundant code
         else if (querystring && /article/.test(querystring)) {
             var urlParams = querystring.split('&');
             for (var i = 0; i < urlParams.length; i++) {
@@ -226,7 +226,7 @@ SYMPHONY.remote.hello().then(function(data) {
                 if (itemId == "hello-menu-item") {
                     document.getElementById("about-hello-world-app").className = "";
                 }
-            },
+            }
         });
     }.bind(this))
 }.bind(this));
