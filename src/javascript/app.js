@@ -156,17 +156,16 @@ SYMPHONY.remote.hello().then(function(data) {
             modulesService.openLink("https://www.google.com");
         });
 
+        // RENDERERS AND STRUCTURED OBJECTS: Send a message with a structured object and have it render statically or dynamically.
+        // You'll need a threadId (the Id of the IM/MIM/Room) and a valid session token and key manager token to send a message.
         var messageButton = document.getElementById("structured-objects-playground");
         messageButton.addEventListener( "click", function() {
-            var threadId = "kVIiQC8jNpBVF1r8FgaV93___qLH15nNdA";
+            // Replace with your threadId
+            var threadId = 'threadId';
+            // messageSendV4 has a form data content type
             var fd = new FormData();
-            //fd.append('message', messageData.messageMLV2);
-            fd.append('message',
-            `<messageML>
-                   <div class="entity" data-entity-id="staticTimer">
-                   Please install the Hello World application
-                   </div>
-             </messageML>`);
+            fd.append('message', messageData.staticEntityMessage);
+            // The structured object that will be sent
             var object = {
                 staticTimer: {
                     type: "com.symphony.staticTimer",
@@ -175,14 +174,15 @@ SYMPHONY.remote.hello().then(function(data) {
                 }
             }
             fd.append('data', JSON.stringify(object));
+            // Send the post message request
             $.ajax({
                 url: 'https://nexus1-dev.symphony.com/agent/v4/stream/' + threadId + '/message/create',
                 type: 'POST',
                 contentType: false,
                 processData: false,
                 headers: {
-                    'sessionToken' : 'e01309efb0c97ab2a525252b97518d6ec965fa6a156e6cdefaec841989364039a72a65506d293bc56ee1cdb9ecf87b1f6a3d079065c67b360737ecbbf70f692f',
-                    'keyManagerToken' : '0100fa512991481f48633965f5fef433a7cc573ea31f8c652f751a8b7327937bf340556dc7742c46c43612f5f94a6305899040f583280e115b281fa8fd50b4346f749727e8a639b2e863c29c9e1cb1519d549b90e561cb7b073b2d0df5ebcecd78f760b9afb4ff70e00ad227629bad6ef05facc2a0c27aae7fa7e1fdc77653690f558afc3782803f8fd8a0a7048642b5c7d773409a1f5a7c7713d4f25c499fcf4c4420b971eaac82702bc859e3b5493b09b5b666d5a53498ed2832c3c45e'
+                    'sessionToken' :'ST',
+                    'keyManagerToken' : 'KMT'
                 },
                 data: fd,
              });

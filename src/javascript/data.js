@@ -32,9 +32,9 @@ exports.messageMLV2 =
 </messageML>`
 
 
-
-
-
-
-
-
+exports.staticEntityMessage =
+`<messageML>
+    <div class="entity" data-entity-id="staticTimer">
+    Please install the Hello World application
+    </div>
+</messageML>`

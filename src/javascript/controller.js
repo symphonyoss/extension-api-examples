@@ -20,10 +20,8 @@
 // We have namespaced local services with "hello:"
 var helloControllerService = SYMPHONY.services.register("hello:controller");
 
+// This is the message controller service, to be used for static and dynamic rendering
 var messageControllerService = SYMPHONY.services.register("message:controller");
-
-var data = require('./data');
-
 
 // All Symphony services are namespaced with SYMPHONY
 SYMPHONY.remote.hello().then(function(data) {
@@ -135,7 +133,10 @@ SYMPHONY.remote.hello().then(function(data) {
             },
         });
 
+        // Implement some methods to render the structured objects sent by the app to our specified thread
         messageControllerService.implement({
+
+            // Calculate how much time remains from the current timestamp until Jan 1, 2050
             calculateDifference: function(today, until) {
                 var ms = until-today;
                 var hrs = Math.floor(ms/1000/60/60);
@@ -157,12 +158,15 @@ SYMPHONY.remote.hello().then(function(data) {
                return diff;
             },
 
+            // Render the message sent by the app
             render: function(type, entityData) {
+                // Static rendering
                 if(type == "com.symphony.staticTimer") {
                     var today = new Date();
                     var until = new Date(2050, 0);
                     var diff = this.calculateDifference(today, until);
                     return {
+                        // Use a custom template to utilise data sent with the message in entityData in our messageML message
                         template: `<messageML>
                                   <card>
                                       <span>The time until <text id="countdown"/> is <text id="concat"/></span>
