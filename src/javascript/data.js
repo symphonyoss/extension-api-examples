@@ -45,10 +45,3 @@ exports.dynamicEntityMessage =
     Please install the Hello World application to render the dynamic timer
     </div>
 </messageML>`
-
-exports.timerTemplate =
-`<messageML>
-   <card>
-       <span>The time until <text id="countdown"/> is <text id="concat"/></span>
-   </card>
-</messageML>`

@@ -134,6 +134,7 @@ SYMPHONY.remote.hello().then(function(data) {
             },
         });
 
+        // The list of entities to track for dynamic rendering each entity individually
         messageControllerService.tracked = {};
 
         // Implement some methods to render the structured objects sent by the app to our specified thread
@@ -161,10 +162,12 @@ SYMPHONY.remote.hello().then(function(data) {
                return diff;
             },
 
+            // Track each entity indexed by its instance id
             track: function(entity) {
                 this.tracked[entity.instanceId] = entity;
             },
 
+            // Rerender each tracked entity every 'tick'
             tick: function() {
               for(var instanceId in this.tracked) {
                   entity = this.tracked[instanceId];
@@ -172,11 +175,12 @@ SYMPHONY.remote.hello().then(function(data) {
               }
             },
 
+            // Use the entity data to update the rendering of the message through the entity service
             rerender: function(tracked) {
                 var entityData = tracked.entityData;
                 var timeData = this.getTimeData(entityData);
 
-                return entityService.update(entityData.instanceId, timeData.template, timeData.data);
+                return entityService.update(timeData.instanceId, timeData.template, timeData.data);
             },
 
             // Render the message sent by the app
@@ -187,17 +191,25 @@ SYMPHONY.remote.hello().then(function(data) {
                 // Static rendering
                 if(version == "1.0") {
                     return this.getTimeData(entityData);
+
+                // Dynamic rendering
                 } else if (version == "2.0") {
-                    var instanceId = Math.floor(Math.random()*1000001);
+                    // Generate a id for each entity (unique enough for sampling purposes)
+                    // Consider how to translate uuids as list indexing for more robust id marking
+                    var instanceId = Math.floor(Math.random()*1000000);
+
+                    // Track each entity
                     setTimeout(function () {
                         this.track({instanceId: instanceId, entityData: entityData});
                     }.bind(this), 5000);
 
-                    this.interval = setInterval(this.tick.bind(this), 10000);
+                    // Render the countdown every 5 seconds
+                    this.interval = setInterval(this.tick.bind(this), 5000);
                     return this.getTimeData(entityData);
                 }
             },
 
+            // Render the template using the current timestamp and the specified date from entity data
             getTimeData: function(entityData) {
                 var today = new Date();
                 var until = new Date(entityData.countdown);
