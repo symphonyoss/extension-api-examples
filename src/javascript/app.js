@@ -170,7 +170,7 @@ SYMPHONY.remote.hello().then(function(data) {
                 staticTimer: {
                     type: "com.symphony.staticTimer",
                     version: "1.0",
-                    countdown: "Jan 1, 2050",
+                    countdown: new Date(2050,0)
                 }
             }
             fd.append('data', JSON.stringify(object));

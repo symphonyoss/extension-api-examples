@@ -24,6 +24,8 @@ var helloControllerService = SYMPHONY.services.register("hello:controller");
 // This is the message controller service, to be used for static and dynamic rendering
 var messageControllerService = SYMPHONY.services.register("message:controller");
 
+var uuidv4 = require('uuid/v4');
+
 // All Symphony services are namespaced with SYMPHONY
 SYMPHONY.remote.hello().then(function(data) {
 
@@ -134,6 +136,8 @@ SYMPHONY.remote.hello().then(function(data) {
             },
         });
 
+        messageControllerService.tracked = {};
+
         // Implement some methods to render the structured objects sent by the app to our specified thread
         messageControllerService.implement({
 
@@ -159,27 +163,61 @@ SYMPHONY.remote.hello().then(function(data) {
                return diff;
             },
 
+            track: function(entity) {
+                this.tracked[entity.instanceId] = entity;
+            },
+
+            tick: function() {
+              Object.each(this.tracked, function(entity)
+              {
+                  this.rerender(entity);
+              }, this);
+            },
+
+            rerender: function(tracked) {
+                var entityData = tracked.entityData;
+                return
+            }
+
             // Render the message sent by the app
             render: function(type, entityData) {
                 // Static rendering
                 if(type == "com.symphony.staticTimer") {
                     var today = new Date();
-                    var until = new Date(2050, 0);
+                    var until = entityData.countdown;
                     var diff = this.calculateDifference(today, until);
-                    return {
-                        // Use a custom template to utilise data sent with the message in entityData in our messageML message
-                        template: `<messageML>
+
+                    return this.getTimeData(entityData);
+
+                } else if (type == "com.symphony.dynamicTimer") {
+                    var instanceId = uuid.v4();
+                    setTimeout(function()
+                    {
+                        this.track({instanceId: instanceId, entityData: entityData});
+                    }).bind(this, 5000);
+
+                    this.interval = setInterval(this.tick.bind(this), 5000);
+                }
+            },
+
+            getTimeData: function(entityData) {
+                return {
+                    var today = new Date();
+                var until = entityData.countdown;
+                var diff = this.calculateDifference(today, until);
+                return {
+                    // Use a custom template to utilise data sent with the message in entityData in our messageML message
+                    template: `<messageML>
                                   <card>
                                       <span>The time until <text id="countdown"/> is <text id="concat"/></span>
                                   </card>
                                </messageML>`,
-                        data: {
-                            concat: diff.yrs + " years, " + diff.days + " days, " +
-                            diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
-                            countdown: entityData.countdown
-                        },
-                        entityInstanceId: ""
-                    };
+                    data: {
+                        concat: diff.yrs + " years, " + diff.days + " days, " +
+                        diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
+                        countdown: until
+                    },
+                    entityInstanceId: ""
                 }
             }
         });
