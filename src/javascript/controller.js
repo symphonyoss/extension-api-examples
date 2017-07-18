@@ -24,8 +24,6 @@ var helloControllerService = SYMPHONY.services.register("hello:controller");
 // This is the message controller service, to be used for static and dynamic rendering
 var messageControllerService = SYMPHONY.services.register("message:controller");
 
-var uuidv4 = require('uuid/v4');
-
 // All Symphony services are namespaced with SYMPHONY
 SYMPHONY.remote.hello().then(function(data) {
 
@@ -176,9 +174,9 @@ SYMPHONY.remote.hello().then(function(data) {
 
             rerender: function(tracked) {
                 var entityData = tracked.entityData;
-                console.log("here");
-                console.log(tracked);
-                return this.getTimeData(entityData);
+                var timeData = this.getTimeData(entityData);
+
+                return entityService.update(entityData.instanceId, timeData.template, timeData.data);
             },
 
             // Render the message sent by the app
@@ -191,21 +189,16 @@ SYMPHONY.remote.hello().then(function(data) {
                     return this.getTimeData(entityData);
                 } else if (version == "2.0") {
                     var instanceId = Math.floor(Math.random()*1000001);
-                    console.log('CONSOLE LOG');
-                    console.log(instanceId);
-
                     setTimeout(function () {
                         this.track({instanceId: instanceId, entityData: entityData});
                     }.bind(this), 5000);
 
-                    this.interval = setInterval(this.tick.bind(this), 5000);
+                    this.interval = setInterval(this.tick.bind(this), 10000);
                     return this.getTimeData(entityData);
                 }
             },
 
             getTimeData: function(entityData) {
-                console.log("RERENDERING");
-                console.log(entityData);
                 var today = new Date();
                 var until = new Date(entityData.countdown);
                 var diff = this.calculateDifference(today, until);
@@ -219,7 +212,7 @@ SYMPHONY.remote.hello().then(function(data) {
                     data: {
                         concat: diff.yrs + " years, " + diff.days + " days, " +
                         diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
-                        countdown: (until.getMonth()+1) + "/" + until.getDate() + "/" + until.getFullYear()
+                        countdown: (until.getMonth() + 1) + "/" + until.getDate() + "/" + until.getFullYear()
                     },
                     entityInstanceId: entityData.instanceId
                 }
