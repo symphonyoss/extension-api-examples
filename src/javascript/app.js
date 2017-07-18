@@ -161,19 +161,27 @@ SYMPHONY.remote.hello().then(function(data) {
         var messageButton = document.getElementById("structured-objects-playground");
         messageButton.addEventListener( "click", function() {
             // Replace with your threadId
-            var threadId = 'threadId';
+            var threadId = 'kVIiQC8jNpBVF1r8FgaV93___qLH15nNdA';
             // messageSendV4 has a form data content type
             var fd = new FormData();
-            fd.append('message', messageData.staticEntityMessage);
+            fd.append('message', messageData.dynamicEntityMessage);
             // The structured object that will be sent
-            var object = {
+            var staticObject = {
                 staticTimer: {
-                    type: "com.symphony.staticTimer",
+                    type: "com.symphony.timer",
                     version: "1.0",
                     countdown: new Date(2050,0)
                 }
-            }
-            fd.append('data', JSON.stringify(object));
+            };
+
+            var dynamicObject = {
+                dynamicTimer: {
+                    type: "com.symphony.timer",
+                    version: "2.0",
+                    countdown: new Date(2050,0)
+                }
+            };
+            fd.append('data', JSON.stringify(dynamicObject));
             // Send the post message request
             $.ajax({
                 url: 'https://nexus1-dev.symphony.com/agent/v4/stream/' + threadId + '/message/create',
@@ -181,10 +189,13 @@ SYMPHONY.remote.hello().then(function(data) {
                 contentType: false,
                 processData: false,
                 headers: {
-                    'sessionToken' :'ST',
-                    'keyManagerToken' : 'KMT'
+                    'sessionToken' :'76ee0ac82133e153592bb7198c10b6e7564cee8cacc03b6050c3f90b58ff2415eabafeef9f77d8ea52a3abc8304a306887ed36a6226a7661564cd507fa9744bd',
+                    'keyManagerToken' : '01003ade073667821e75409151aa449f77d958aeae10de9cae78f4be5db9f7ea42498d2b04976123def5360a19cc2d76c5f6e40104f64c593468e6734cf0ac0293e2d73f942b3d61c3ac144ba9488ff7a45af68e07ebf85a0a85bbe0406ac5c46672e99b8608da69fa622477ecfdcdd584055bbc6cc7f69a7924976fe7ac1535cc772e3dea0e717e8a0ad1b4937f3f00bd08128b8ef909b967e461f46c2bdf1198593e661aac85883d9951309142b1a1458f11ec5c5f315277fe09fc28ad'
                 },
                 data: fd,
+                error: function(xhr) {
+                    console.log(xhr);
+                }
              });
          });
 

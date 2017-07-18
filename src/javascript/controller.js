@@ -46,7 +46,7 @@ SYMPHONY.remote.hello().then(function(data) {
         var shareService = SYMPHONY.services.subscribe("share");
         var entityService = SYMPHONY.services.subscribe("entity");
         entityService.registerRenderer(
-            "com.symphony.staticTimer",
+            "com.symphony.timer",
             {},
             "message:controller"
         );
@@ -168,42 +168,46 @@ SYMPHONY.remote.hello().then(function(data) {
             },
 
             tick: function() {
-              Object.each(this.tracked, function(entity)
-              {
+              for(var instanceId in this.tracked) {
+                  entity = this.tracked[instanceId];
                   this.rerender(entity);
-              }, this);
+              }
             },
 
             rerender: function(tracked) {
                 var entityData = tracked.entityData;
-                return
-            }
+                console.log("here");
+                console.log(tracked);
+                return this.getTimeData(entityData);
+            },
 
             // Render the message sent by the app
             render: function(type, entityData) {
+                var version = entityData.version;
+                var instanceId = Math.floor(Math.random()*1000001);
+                entityData.instanceId = instanceId;
                 // Static rendering
-                if(type == "com.symphony.staticTimer") {
-                    var today = new Date();
-                    var until = entityData.countdown;
-                    var diff = this.calculateDifference(today, until);
-
+                if(version == "1.0") {
                     return this.getTimeData(entityData);
+                } else if (version == "2.0") {
+                    var instanceId = Math.floor(Math.random()*1000001);
+                    console.log('CONSOLE LOG');
+                    console.log(instanceId);
 
-                } else if (type == "com.symphony.dynamicTimer") {
-                    var instanceId = uuid.v4();
-                    setTimeout(function()
-                    {
+                    setTimeout(function () {
                         this.track({instanceId: instanceId, entityData: entityData});
-                    }).bind(this, 5000);
+                    }.bind(this), 5000);
 
                     this.interval = setInterval(this.tick.bind(this), 5000);
+                    return this.getTimeData(entityData);
                 }
             },
 
             getTimeData: function(entityData) {
-                return {
-                    var today = new Date();
-                var until = entityData.countdown;
+                console.log("RERENDERING");
+                console.log(entityData);
+                var today = new Date();
+                var until = new Date(entityData.countdown);
                 var diff = this.calculateDifference(today, until);
                 return {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
@@ -215,9 +219,9 @@ SYMPHONY.remote.hello().then(function(data) {
                     data: {
                         concat: diff.yrs + " years, " + diff.days + " days, " +
                         diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
-                        countdown: until
+                        countdown: (until.getMonth()+1) + "/" + until.getDate() + "/" + until.getFullYear()
                     },
-                    entityInstanceId: ""
+                    entityInstanceId: entityData.instanceId
                 }
             }
         });

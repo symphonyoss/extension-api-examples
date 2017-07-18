@@ -35,6 +35,13 @@ exports.messageMLV2 =
 exports.staticEntityMessage =
 `<messageML>
     <div class="entity" data-entity-id="staticTimer">
-    Please install the Hello World application
+    Please install the Hello World application to render the static timer
+    </div>
+</messageML>`
+
+exports.dynamicEntityMessage =
+`<messageML>
+    <div class="entity" data-entity-id="dynamicTimer">
+    Please install the Hello World application to render the dynamic timer
     </div>
 </messageML>`
