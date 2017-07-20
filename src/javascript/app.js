@@ -160,13 +160,14 @@ SYMPHONY.remote.hello().then(function(data) {
         // You'll need a threadId (the Id of the IM/MIM/Room) and a valid session token and key manager token to send a message.
         var messageButton = document.getElementById("structured-objects-playground");
         messageButton.addEventListener( "click", function() {
-            // Replace with your threadId
+            // Replace with your agentUrl and threadId
+            agentUrl = 'REQUIRED' // Ex. nexus.symphony.com
             var threadId = 'REQUIRED';
             // messageSendV4 has a form data content type
             var fd = new FormData();
             // Append the type of message you would like to send
             // Associate it with the appropriate structured object (static or dynamic)
-            fd.append('message', messageData.dynamicEntityMessage);
+            fd.append('message', messageData.staticEntityMessage);
             // The structured objects that can be sent
             var staticObject = {
                 staticTimer: {
@@ -183,10 +184,10 @@ SYMPHONY.remote.hello().then(function(data) {
                     countdown: new Date(2050,0)
                 }
             };
-            fd.append('data', JSON.stringify(dynamicObject));
+            fd.append('data', JSON.stringify(staticObject));
             // Send the post message request
             $.ajax({
-                url: 'https://nexus1-dev.symphony.com/agent/v4/stream/' + threadId + '/message/create',
+                url: 'https://' + agentUrl + '/agent/v4/stream/' + threadId + '/message/create',
                 type: 'POST',
                 contentType: false,
                 processData: false,
