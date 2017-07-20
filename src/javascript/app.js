@@ -161,7 +161,7 @@ SYMPHONY.remote.hello().then(function(data) {
         var messageButton = document.getElementById("structured-objects-playground");
         messageButton.addEventListener( "click", function() {
             // Replace with your agentUrl and threadId
-            agentUrl = 'REQUIRED' // Ex. nexus.symphony.com
+            var agentUrl = 'REQUIRED' // Ex. nexus.symphony.com
             var threadId = 'REQUIRED';
             // messageSendV4 has a form data content type
             var fd = new FormData();
