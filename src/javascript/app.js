@@ -21,6 +21,10 @@
 // We have namespaced local services with "hello:"
 var helloAppService = SYMPHONY.services.register("hello:app");
 
+
+var $ = require('jquery');
+var messageData = require('./data');
+
 SYMPHONY.remote.hello().then(function(data) {
 
     // Set the theme of the app module
@@ -42,11 +46,13 @@ SYMPHONY.remote.hello().then(function(data) {
         var uiService = SYMPHONY.services.subscribe("ui");
         var shareService = SYMPHONY.services.subscribe("share");
 
+
+
         // UI: Listen for theme change events
         uiService.listen("themeChangeV2", function() {
-            SYMPHONY.remote.hello().then(function(data) {
-                themeColor = data.themeV2.name;
-                themeSize = data.themeV2.size;
+            SYMPHONY.remote.hello().then(function(theme) {
+                themeColor = theme.themeV2.name;
+                themeSize = theme.themeV2.size;
                 document.body.className = "symphony-external-app " + themeColor + " " + themeSize;
             });
         });
@@ -54,6 +60,7 @@ SYMPHONY.remote.hello().then(function(data) {
         // MODULE: Add a menu item to our module
         modulesService.addMenuItem("hello", "About Hello World App", "hello-menu-item");
         modulesService.setHandler("hello", "hello:app");
+
 
         // LEFT NAV: Update the left navigation item's badge count when the "Increment Unread Badge Count" button is clicked using the navService's count method.
         var incrementButton = document.getElementById("increment");
@@ -149,6 +156,50 @@ SYMPHONY.remote.hello().then(function(data) {
             modulesService.openLink("https://www.google.com");
         });
 
+        // RENDERERS AND STRUCTURED OBJECTS: Send a message with a structured object and have it render statically or dynamically.
+        // You'll need a threadId (the Id of the IM/MIM/Room) and a valid session token and key manager token to send a message.
+        var messageButton = document.getElementById("structured-objects-playground");
+        messageButton.addEventListener( "click", function() {
+            // Replace with your agentUrl and threadId
+            var agentUrl = 'REQUIRED' // Ex. nexus.symphony.com
+            var threadId = 'REQUIRED';
+            // messageSendV4 has a form data content type
+            var fd = new FormData();
+            // Append the type of message you would like to send
+            // Associate it with the appropriate structured object (static or dynamic)
+            fd.append('message', messageData.staticEntityMessage);
+            // The structured objects that can be sent
+            var staticObject = {
+                staticTimer: {
+                    type: "com.symphony.timer",
+                    version: "1.0",
+                    countdown: new Date(2050,0)
+                }
+            };
+
+            var dynamicObject = {
+                dynamicTimer: {
+                    type: "com.symphony.timer",
+                    version: "2.0",
+                    countdown: new Date(2050,0)
+                }
+            };
+            fd.append('data', JSON.stringify(staticObject));
+            // Send the post message request
+            $.ajax({
+                url: 'https://' + agentUrl + '/agent/v4/stream/' + threadId + '/message/create',
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                headers: {
+                    'sessionToken' :'REQUIRED',
+                    'keyManagerToken' : 'REQUIRED'
+                },
+                data: fd
+             });
+         });
+
+
         // UI CASHTAG: If the app is opened in the context of a cashtag, show the cashtag in the text box on the app.
         // window.location.search returns the querystring part of a URL. Use substring to omit the leading ?.
         var querystring = window.location.search.substring(1);
@@ -188,6 +239,5 @@ SYMPHONY.remote.hello().then(function(data) {
                 }
             }
         });
-
     }.bind(this))
 }.bind(this));

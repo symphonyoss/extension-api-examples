@@ -20,6 +20,8 @@
 # under the License.
 #
 language: node_js
+node_js:
+  - "node"
 
 env:
   global:
