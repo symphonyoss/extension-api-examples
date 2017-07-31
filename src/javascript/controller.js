@@ -36,7 +36,7 @@ SYMPHONY.remote.hello().then(function(data) {
         // The userReferenceId persists until the application is uninstalled by the user. 
         // If the application is reinstalled, the userReferenceId will change.
         var userId = response.userReferenceId;
-
+    })});
         // Subscribe to Symphony's services
         var modulesService = SYMPHONY.services.subscribe("modules");
         var navService = SYMPHONY.services.subscribe("applications-nav");
@@ -216,14 +216,17 @@ SYMPHONY.remote.hello().then(function(data) {
                 return {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
                     template: `<messageML>
+                                  <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
                                   <card>
-                                      <span>The time until <text id="countdown"/> is <text id="concat"/></span>
+                                      <h1>Countdown timer v<text id="version"/></h1>
+                                      <div>The time until <b><text id="countdown"/></b> is <text id="concat"/></div>
                                   </card>
                                </messageML>`,
                     data: {
                         concat: diff.yrs + " years, " + diff.days + " days, " +
                         diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
-                        countdown: (until.getMonth() + 1) + "/" + until.getDate() + "/" + until.getFullYear()
+                        countdown: (until.getMonth() + 1) + "/" + until.getDate() + "/" + until.getFullYear(),
+                        version: entityData.version
                     },
                     entityInstanceId: entityData.instanceId
                 }
