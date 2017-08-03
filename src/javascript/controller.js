@@ -36,7 +36,7 @@ SYMPHONY.remote.hello().then(function(data) {
         // The userReferenceId persists until the application is uninstalled by the user. 
         // If the application is reinstalled, the userReferenceId will change.
         var userId = response.userReferenceId;
-    })});
+
         // Subscribe to Symphony's services
         var modulesService = SYMPHONY.services.subscribe("modules");
         var navService = SYMPHONY.services.subscribe("applications-nav");
