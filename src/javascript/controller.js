@@ -140,9 +140,9 @@ SYMPHONY.remote.hello().then(function(data) {
         // Implement some methods to render the structured objects sent by the app to our specified thread
         messageControllerService.implement({
 
-            // Calculate how much time remains from the current timestamp until Jan 1, 2050
-            calculateDifference: function(today, until) {
-                var ms = until-today;
+            // Calculate how much time has passed since the entity's initial render
+            calculateDifference: function(initial, current) {
+                var ms = current-initial;
                 var hrs = Math.floor(ms/1000/60/60);
                 ms -= hrs * 1000 * 60 * 60;
                 var min = Math.floor(ms/1000/60);
@@ -188,6 +188,8 @@ SYMPHONY.remote.hello().then(function(data) {
                 // Consider how to translate uuids as list indexing for more robust id marking
                 var instanceId = Math.floor(Math.random()*1000000);
                 entityData.instanceId = instanceId;
+                var renderTime = new Date();
+                entityData.renderTime = renderTime;
 
                 // Static rendering
                 if(version == "1.0") {
@@ -200,6 +202,7 @@ SYMPHONY.remote.hello().then(function(data) {
                         this.track({instanceId: instanceId, entityData: entityData});
                     }.bind(this), 5000);
 
+
                     // Render the countdown every 5 seconds
                     this.interval = setInterval(function () {
                         this.tick(instanceId)
@@ -210,22 +213,23 @@ SYMPHONY.remote.hello().then(function(data) {
 
             // Render the template using the current timestamp and the specified date from entity data
             getTimeData: function(entityData) {
-                var today = new Date();
-                var until = new Date(entityData.countdown);
-                var diff = this.calculateDifference(today, until);
+                var renderTime = entityData.renderTime;
+                var current = new Date();
+                var diff = this.calculateDifference(renderTime, current);
                 return {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
                     template: `<messageML>
                                   <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
                                   <card>
-                                      <h1>Countdown timer v<text id="version"/></h1>
-                                      <div>The time until <b><text id="countdown"/></b> is <text id="concat"/></div>
+                                      <h1>Render timer v<text id="version"/></h1>
+                                      <div>The time from the initial rendering at <b><text id="countdown"/></b> is <text id="concat"/></div>
                                   </card>
                                </messageML>`,
                     data: {
                         concat: diff.yrs + " years, " + diff.days + " days, " +
                         diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
-                        countdown: (until.getMonth() + 1) + "/" + until.getDate() + "/" + until.getFullYear(),
+                        countdown: renderTime.getHours() + ":" + renderTime.getMinutes() + ":" + renderTime.getSeconds() + " on " +
+                                  (renderTime.getMonth() + 1) + "/" + renderTime.getDate() + "/" + renderTime.getFullYear(),
                         version: entityData.version
                     },
                     entityInstanceId: entityData.instanceId
