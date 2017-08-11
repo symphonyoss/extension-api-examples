@@ -216,15 +216,27 @@ SYMPHONY.remote.hello().then(function(data) {
                 var renderTime = entityData.renderTime;
                 var current = new Date();
                 var diff = this.calculateDifference(renderTime, current);
-                return {
-                    // Use a custom template to utilise data sent with the message in entityData in our messageML message
-                    template: `<messageML>
+                var template;
+                if( entityData.version === "1.0" ) {
+                    template = `<messageML>
+                                  <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
+                                  <card>
+                                      <h1>Render timer v<text id="version"/></h1>
+                                      <div>The time at the initial rendering was <b><text id="countdown"/></b></div>
+                                  </card>
+                               </messageML>`
+                } else {
+                    template = `<messageML>
                                   <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
                                   <card>
                                       <h1>Render timer v<text id="version"/></h1>
                                       <div>The time from the initial rendering at <b><text id="countdown"/></b> is <text id="concat"/></div>
                                   </card>
-                               </messageML>`,
+                               </messageML>`
+                }
+                return {
+                    // Use a custom template to utilise data sent with the message in entityData in our messageML message
+                    template: template,
                     data: {
                         concat: diff.yrs + " years, " + diff.days + " days, " +
                         diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
