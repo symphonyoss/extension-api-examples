@@ -198,12 +198,12 @@ SYMPHONY.remote.hello().then(function(data) {
                     // Track each entity
                     setTimeout(function () {
                         this.track({instanceId: instanceId, entityData: entityData});
-                    }.bind(this), 5000);
+                    }.bind(this), 1000);
 
-                    // Render the countdown every 5 seconds
+                    // Render the countdown every 1 seconds
                     this.interval = setInterval(function () {
                         this.tick(instanceId)
-                    }.bind(this), 5000);
+                    }.bind(this), 1000);
                     return this.getTimeData(entityData);
                 }
             },
@@ -216,15 +216,16 @@ SYMPHONY.remote.hello().then(function(data) {
                 return {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
                     template: `<messageML>
-                                  <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
                                   <card>
-                                      <h1>Countdown timer v<text id="version"/></h1>
-                                      <div>The time until <b><text id="countdown"/></b> is <text id="concat"/></div>
+                                      <header>Time remaining until <b><text id="countdown"/></b> : <text id="concat"/></header>
                                   </card>
                                </messageML>`,
                     data: {
-                        concat: diff.yrs + " years, " + diff.days + " days, " +
-                        diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
+                        concat: "<span class='tempo-bg-color--theme-primary'>" + diff.yrs + "</span> years," +
+                        " <span class='tempo-bg-color--theme-primary'>" + diff.days + "</span> days, " +
+                        diff.hrs + "</span> hrs," +
+                        " <span class='tempo-bg-color--theme-primary'>" + diff.min + "</span> minutes," +
+                        " and <span class='tempo-bg-color--theme-accent'>" + diff.sec + "</span> seconds",
                         countdown: (until.getMonth() + 1) + "/" + until.getDate() + "/" + until.getFullYear(),
                         version: entityData.version
                     },
