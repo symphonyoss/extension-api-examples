@@ -200,13 +200,13 @@ SYMPHONY.remote.hello().then(function(data) {
                     // Track each entity
                     setTimeout(function () {
                         this.track({instanceId: instanceId, entityData: entityData});
-                    }.bind(this), 5000);
+                    }.bind(this), 1000);
 
 
                     // Render the countdown every 5 seconds
                     this.interval = setInterval(function () {
                         this.tick(instanceId)
-                    }.bind(this), 5000);
+                    }.bind(this), 1000);
                     return this.getTimeData(entityData);
                 }
             },
@@ -219,18 +219,18 @@ SYMPHONY.remote.hello().then(function(data) {
                 var template;
                 if( entityData.version === "1.0" ) {
                     template = `<messageML>
-                                  <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
                                   <card>
-                                      <h1>Render timer v<text id="version"/></h1>
-                                      <div>The time at the initial rendering was <b><text id="countdown"/></b></div>
+                                      <div>The time at the initial rendering was <b><text id="timeAtRender"/></b></div>
                                   </card>
                                </messageML>`
-                } else {
+                } else if( entityData.version === "2.0" ) {
                     template = `<messageML>
-                                  <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
                                   <card>
-                                      <h1>Render timer v<text id="version"/></h1>
-                                      <div>The time from the initial rendering at <b><text id="countdown"/></b> is <text id="concat"/></div>
+                                      <div>The time from the initial rendering at <b><text id="timeAtRender"/></b> is 
+                                      <span class='tempo-bg-color--theme-primary'><text id="years"/></span> years, 
+                                      <span class='tempo-bg-color--theme-primary'><text id="hrs"/></span> days, 
+                                      <span class='tempo-bg-color--theme-primary'><text id="min"/></span> minutes, and
+                                      <span class='tempo-bg-color--theme-accent'><text id="sec"/></span> seconds,</div>
                                   </card>
                                </messageML>`
                 }
@@ -238,12 +238,12 @@ SYMPHONY.remote.hello().then(function(data) {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
                     template: template,
                     data: {
-                        concat: diff.yrs + " years, " + diff.days + " days, " +
-                        diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
-                        countdown: renderTime.getHours() + ":" + renderTime.getMinutes() + ":" + renderTime.getSeconds() + " on " +
-                                  (renderTime.getMonth() + 1) + "/" + renderTime.getDate() + "/" + renderTime.getFullYear(),
-                        version: entityData.version
-                    },
+                        years: "" + diff.yrs,
+                        days: "" + diff.days,
+                        hrs: "" + diff.hrs,
+                        min: "" + diff.min,
+                        sec: "" + diff.sec,
+                        timeAtRender: renderTime.toLocaleTimeString() + " on  " + renderTime.toLocaleDateString()},
                     entityInstanceId: entityData.instanceId
                 }
             }
