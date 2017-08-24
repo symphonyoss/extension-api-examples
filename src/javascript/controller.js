@@ -36,7 +36,7 @@ SYMPHONY.remote.hello().then(function(data) {
         // The userReferenceId persists until the application is uninstalled by the user. 
         // If the application is reinstalled, the userReferenceId will change.
         var userId = response.userReferenceId;
-    })});
+
         // Subscribe to Symphony's services
         var modulesService = SYMPHONY.services.subscribe("modules");
         var navService = SYMPHONY.services.subscribe("applications-nav");
@@ -140,9 +140,9 @@ SYMPHONY.remote.hello().then(function(data) {
         // Implement some methods to render the structured objects sent by the app to our specified thread
         messageControllerService.implement({
 
-            // Calculate how much time remains from the current timestamp until Jan 1, 2050
-            calculateDifference: function(today, until) {
-                var ms = until-today;
+            // Calculate how much time has passed since the entity's initial render
+            calculateDifference: function(initial, current) {
+                var ms = current-initial;
                 var hrs = Math.floor(ms/1000/60/60);
                 ms -= hrs * 1000 * 60 * 60;
                 var min = Math.floor(ms/1000/60);
@@ -188,6 +188,8 @@ SYMPHONY.remote.hello().then(function(data) {
                 // Consider how to translate uuids as list indexing for more robust id marking
                 var instanceId = Math.floor(Math.random()*1000000);
                 entityData.instanceId = instanceId;
+                var renderTime = new Date();
+                entityData.renderTime = renderTime;
 
                 // Static rendering
                 if(version == "1.0") {
@@ -198,36 +200,50 @@ SYMPHONY.remote.hello().then(function(data) {
                     // Track each entity
                     setTimeout(function () {
                         this.track({instanceId: instanceId, entityData: entityData});
-                    }.bind(this), 5000);
+                    }.bind(this), 1000);
+
 
                     // Render the countdown every 5 seconds
                     this.interval = setInterval(function () {
                         this.tick(instanceId)
-                    }.bind(this), 5000);
+                    }.bind(this), 1000);
                     return this.getTimeData(entityData);
                 }
             },
 
             // Render the template using the current timestamp and the specified date from entity data
             getTimeData: function(entityData) {
-                var today = new Date();
-                var until = new Date(entityData.countdown);
-                var diff = this.calculateDifference(today, until);
+                var renderTime = entityData.renderTime;
+                var current = new Date();
+                var diff = this.calculateDifference(renderTime, current);
+                var template;
+                if( entityData.version === "1.0" ) {
+                    template = `<messageML>
+                                  <card>
+                                      <div>The time at the initial rendering was <b><text id="timeAtRender"/></b></div>
+                                  </card>
+                               </messageML>`
+                } else if( entityData.version === "2.0" ) {
+                    template = `<messageML>
+                                  <card>
+                                      <div>The time from the initial rendering at <b><text id="timeAtRender"/></b> is 
+                                      <span class='tempo-bg-color--theme-primary'><text id="years"/></span> years, 
+                                      <span class='tempo-bg-color--theme-primary'><text id="hrs"/></span> days, 
+                                      <span class='tempo-bg-color--theme-primary'><text id="min"/></span> minutes, and
+                                      <span class='tempo-bg-color--theme-accent'><text id="sec"/></span> seconds,</div>
+                                  </card>
+                               </messageML>`
+                }
                 return {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
-                    template: `<messageML>
-                                  <img src="https://www.wallstreetoasis.com/files/sy_500x100.png"/>
-                                  <card>
-                                      <h1>Countdown timer v<text id="version"/></h1>
-                                      <div>The time until <b><text id="countdown"/></b> is <text id="concat"/></div>
-                                  </card>
-                               </messageML>`,
+                    template: template,
                     data: {
-                        concat: diff.yrs + " years, " + diff.days + " days, " +
-                        diff.hrs + " hrs, " + diff.min + " minutes, and " + diff.sec + " seconds",
-                        countdown: (until.getMonth() + 1) + "/" + until.getDate() + "/" + until.getFullYear(),
-                        version: entityData.version
-                    },
+                        years: "" + diff.yrs,
+                        days: "" + diff.days,
+                        hrs: "" + diff.hrs,
+                        min: "" + diff.min,
+                        sec: "" + diff.sec,
+                        timeAtRender: renderTime.toLocaleTimeString() + " on  " + renderTime.toLocaleDateString()},
                     entityInstanceId: entityData.instanceId
                 }
             }

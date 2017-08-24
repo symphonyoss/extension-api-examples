@@ -23,7 +23,6 @@ var helloAppService = SYMPHONY.services.register("hello:app");
 
 
 var $ = require('jquery');
-var messageData = require('./data');
 
 SYMPHONY.remote.hello().then(function(data) {
 
