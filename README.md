@@ -36,3 +36,4 @@ and in turn your application can listen and react to click events on those butto
 You've successfully installed the Hello World application. You'll notice a new entry on the left nav
 titled "Hello." Click on this to open the app in the Symphony grid. Explore the source code in
 `src/javascript` to understand how the application works.
+
