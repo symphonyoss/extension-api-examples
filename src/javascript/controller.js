@@ -1,21 +1,21 @@
 /**
-* Licensed to the Symphony Software Foundation (SSF) under one
-* or more contributor license agreements.  See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership.  The SSF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License.  You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-**/
+ * Licensed to the Symphony Software Foundation (SSF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The SSF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ **/
 
 // Create our own local controller service.
 // We have namespaced local services with "hello:"
@@ -141,8 +141,8 @@ SYMPHONY.remote.hello().then(function(data) {
         messageControllerService.implement({
 
             // Calculate how much time has passed since the entity's initial render
-            calculateDifference: function(initial, current) {
-                var ms = current-initial;
+            calculateDifference: function(countdown, current) {
+                var ms = countdown-current;
                 var hrs = Math.floor(ms/1000/60/60);
                 ms -= hrs * 1000 * 60 * 60;
                 var min = Math.floor(ms/1000/60);
@@ -153,13 +153,17 @@ SYMPHONY.remote.hello().then(function(data) {
                 days-=yrs*365;
                 hrs-=((yrs*365*24)+(days*24));
                 var diff = {
-                    sec : sec,
-                    min : min,
-                    hrs : hrs,
-                    days : days,
-                    yrs : yrs
-                 };
-               return diff;
+                    sec : this.pad(sec),
+                    min : this.pad(min),
+                    hrs : this.pad(hrs),
+                    days : this.pad(days),
+                    yrs : this.pad(yrs)
+                };
+                return diff;
+            },
+
+            pad: function(n) {
+                return (n<10) ? ("0" + n) : n;
             },
 
             // Track each entity indexed by its instance id
@@ -169,15 +173,14 @@ SYMPHONY.remote.hello().then(function(data) {
 
             // Rerender a tracked entity every 'tick'
             tick: function(instanceId) {
-                  entity = this.tracked[instanceId];
-                  this.rerender(entity);
+                entity = this.tracked[instanceId];
+                this.rerender(entity);
             },
 
             // Use the entity data to update the rendering of the message through the entity service
             rerender: function(tracked) {
                 var entityData = tracked.entityData;
                 var timeData = this.getTimeData(entityData);
-
                 return entityService.update(timeData.entityInstanceId, timeData.template, timeData.data);
             },
 
@@ -188,14 +191,11 @@ SYMPHONY.remote.hello().then(function(data) {
                 // Consider how to translate uuids as list indexing for more robust id marking
                 var instanceId = Math.floor(Math.random()*1000000);
                 entityData.instanceId = instanceId;
-                var renderTime = new Date();
-                entityData.renderTime = renderTime;
-
                 // Static rendering
                 if(version == "1.0") {
                     return this.getTimeData(entityData);
 
-                // Dynamic rendering
+                    // Dynamic rendering
                 } else if (version == "2.0") {
                     // Track each entity
                     setTimeout(function () {
@@ -213,27 +213,17 @@ SYMPHONY.remote.hello().then(function(data) {
 
             // Render the template using the current timestamp and the specified date from entity data
             getTimeData: function(entityData) {
-                var renderTime = entityData.renderTime;
                 var current = new Date();
-                var diff = this.calculateDifference(renderTime, current);
-                var template;
-                if( entityData.version === "1.0" ) {
-                    template = `<messageML>
-                                  <card>
-                                      <div>The time at the initial rendering was <b><text id="timeAtRender"/></b></div>
-                                  </card>
+                var diff = this.calculateDifference(new Date(2067, 6, 27), current);
+                var template = `<messageML>
+                                    <div>The time until <b><text id="countdownString"/></b> is 
+                                        <b><span class='tempo-bg-color--theme-primary'><text id="years"/></span></b> years, 
+                                        <b><span class='tempo-bg-color--theme-primary'><text id="days"/></span></b> days,                                                                                                                    
+                                        <b><span class='tempo-bg-color--theme-primary'><text id="hrs"/></span></b> hours, 
+                                        <b><span class='tempo-bg-color--theme-primary'><text id="min"/></span></b> minutes, and
+                                        <b><span class='tempo-bg-color--theme-accent'><text id="sec"/></span></b> seconds
+                                    </div>
                                </messageML>`
-                } else if( entityData.version === "2.0" ) {
-                    template = `<messageML>
-                                  <card>
-                                      <div>The time from the initial rendering at <b><text id="timeAtRender"/></b> is 
-                                      <span class='tempo-bg-color--theme-primary'><text id="years"/></span> years, 
-                                      <span class='tempo-bg-color--theme-primary'><text id="hrs"/></span> days, 
-                                      <span class='tempo-bg-color--theme-primary'><text id="min"/></span> minutes, and
-                                      <span class='tempo-bg-color--theme-accent'><text id="sec"/></span> seconds</div>
-                                  </card>
-                               </messageML>`
-                }
                 return {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
                     template: template,
@@ -243,8 +233,9 @@ SYMPHONY.remote.hello().then(function(data) {
                         hrs: "" + diff.hrs,
                         min: "" + diff.min,
                         sec: "" + diff.sec,
-                        timeAtRender: renderTime.toLocaleTimeString() + " on  " + renderTime.toLocaleDateString()
-                    }
+                        countdownString: entityData.countdownString
+                    },
+                    entityInstanceId: entityData.instanceId
                 }
             }
         });
