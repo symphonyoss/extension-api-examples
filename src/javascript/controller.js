@@ -230,7 +230,7 @@ SYMPHONY.remote.hello().then(function(data) {
                                       <span class='tempo-bg-color--theme-primary'><text id="years"/></span> years, 
                                       <span class='tempo-bg-color--theme-primary'><text id="hrs"/></span> days, 
                                       <span class='tempo-bg-color--theme-primary'><text id="min"/></span> minutes, and
-                                      <span class='tempo-bg-color--theme-accent'><text id="sec"/></span> seconds,</div>
+                                      <span class='tempo-bg-color--theme-accent'><text id="sec"/></span> seconds</div>
                                   </card>
                                </messageML>`
                 }
@@ -243,8 +243,8 @@ SYMPHONY.remote.hello().then(function(data) {
                         hrs: "" + diff.hrs,
                         min: "" + diff.min,
                         sec: "" + diff.sec,
-                        timeAtRender: renderTime.toLocaleTimeString() + " on  " + renderTime.toLocaleDateString()},
-                    entityInstanceId: entityData.instanceId
+                        timeAtRender: renderTime.toLocaleTimeString() + " on  " + renderTime.toLocaleDateString()
+                    }
                 }
             }
         });
