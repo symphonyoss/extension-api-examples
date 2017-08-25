@@ -56,7 +56,7 @@ data:
  "timer": {
        "type": "com.symphony.timer",
        "version":  "1.0",
-       "date": "01/01/2050"
+       "countdownString": "July 27, 2067"
   }
 }    
 ```
