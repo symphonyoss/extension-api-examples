@@ -41,17 +41,23 @@ titled "Hello." Click on this to open the app in the Symphony grid. Explore the 
 
 The Hello World app subscribes to the ‘entity’ Service of the Extension API, which allows the application to render Structured Objects. To use the service to render your own Structured Objects, you’ll need to send either a JCurl or Postman POST messagev4 to a room in the pod where you’ll be running the application. Here is an example of a REST payload that can be used to send a custom entity that will be rendered by the app:
 
+message:
+```
+<messageML>
+	<div class="entity" data-entity-id="timer">
+		<b>[Object Presentation: <i>Please install the Hello World application to render this entity.</i>]</b>
+	</div>
+</messageML>
+
+```
+data: 
 ```
 {
-     message: "<messageML><div class="entity" data-entity-id="timer"><b><i>Please install the Hello World application to
-               render this entity.</i></b></div></messageML>"
-     data: {
-         "timer": {
-               "type": "com.symphony.timer",
-               "version":  "1.0"
-          }
-     }    
-}
+ "timer": {
+       "type": "com.symphony.timer",
+       "version":  "1.0"
+  }
+}    
 ```
 
 When the message is sent, the default rendering will be “Please install the Hello World application to render this entity.” However, the following function tells the message controller render method to look for messages containing a Structured Object of the type ‘com.symphony.timer’:
