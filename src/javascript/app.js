@@ -21,9 +21,6 @@
 // We have namespaced local services with "hello:"
 var helloAppService = SYMPHONY.services.register("hello:app");
 
-
-var $ = require('jquery');
-
 SYMPHONY.remote.hello().then(function(data) {
 
     // Set the theme of the app module
