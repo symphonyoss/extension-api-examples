@@ -236,6 +236,7 @@ SYMPHONY.remote.hello().then(function(data) {
                 }
                 return {
                     // Use a custom template to utilise data sent with the message in entityData in our messageML message
+                    entityInstanceId: entityData.instanceId,
                     template: template,
                     data: {
                         years: "" + diff.yrs,
