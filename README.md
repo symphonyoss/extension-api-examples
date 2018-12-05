@@ -22,7 +22,7 @@ and in turn your application can listen and react to click events on those butto
 * Clone this repo and `cd` into the directory
 * Run `npm i webpack -g`
 * Run `npm i webpack-dev-server -g`
-	* If you have trouble running the webpack-dev-server over HTTPS, check out the --https option described here: https://webpack.github.io/docs/webpack-dev-server.html
+	* If you have trouble running the webpack-dev-server over HTTPS, check out the --https option described here: https://webpack.js.org/configuration/dev-server/#devserver-https
 * Run `npm i`
 * Run `npm run watch`
 * Ensure the sample app is running by visiting https://localhost:4000/app.html
